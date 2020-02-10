@@ -16,7 +16,7 @@ namespace PetGroomingApplication.Repository
         {
             this.groomingContext = new GroomingContext();
         }
-        public List<GroomerModel> GetAllGroomers()
+        public List<Groomer> GetAllGroomers()
         {
             
             return groomingContext.Groomers.ToList();

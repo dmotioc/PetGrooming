@@ -48,6 +48,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Entity.Design" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
@@ -185,6 +187,8 @@
     <Compile Include="Controllers\GroomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PetController.cs" />
+    <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="DAL\GroomingContext.cs" />
     <Compile Include="DAL\GroomingInitializer.cs" />
     <Compile Include="GenericRepository\GenericRepository.cs" />
@@ -193,7 +197,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\GroomerModel.cs" />
+    <Compile Include="Models\Groomer.cs" />
     <Compile Include="Models\DBObjects\PetGroomingModels.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -201,7 +205,9 @@
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\PetCategoryModel.cs" />
+    <Compile Include="Models\Pet.cs" />
+    <Compile Include="Models\Service.cs" />
+    <Compile Include="Models\Species.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\GroomerRepository.cs" />
     <Compile Include="Startup.cs" />
@@ -267,10 +273,22 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Groomer\Index.cshtml" />
+    <Content Include="Views\Groomer\Create.cshtml" />
+    <Content Include="Views\Groomer\Edit.cshtml" />
+    <Content Include="Views\Groomer\Delete.cshtml" />
+    <Content Include="Views\Pet\Index.cshtml" />
+    <Content Include="Views\Service\Index.cshtml" />
+    <Content Include="Views\Pet\Create.cshtml" />
+    <Content Include="Views\Service\Create.cshtml" />
+    <Content Include="Views\Service\Edit.cshtml" />
+    <Content Include="Views\Pet\Edit.cshtml" />
+    <Content Include="Views\Pet\Delete.cshtml" />
+    <Content Include="Views\Service\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Groomer\" />
+    <Folder Include="Views\Services\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

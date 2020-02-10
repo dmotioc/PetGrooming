@@ -12,17 +12,19 @@ namespace PetGroomingApplication.DAL
     public class GroomingContext : DbContext
     {
 
-        public GroomingContext() : base("GroomingContext")
+        public GroomingContext() 
+            : base("GroomingContext") // implicitly the connection string name = class name
         {
         }
 
-        public DbSet<GroomerModel> Groomers { get; set; }
-        //public DbSet<Enrollment> Enrollments { get; set; }
-        //public DbSet<Course> Courses { get; set; }
+        public DbSet<Groomer> Groomers { get; set; }
+        public DbSet<Service> Services { get; set; }
+        public DbSet<Pet> Pets { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-           // modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            // prevent table names from being pluralized
+            // modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
     
     

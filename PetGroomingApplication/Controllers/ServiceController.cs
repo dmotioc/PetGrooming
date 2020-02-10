@@ -8,47 +8,47 @@ using System.Web.Mvc;
 
 namespace PetGroomingApplication.Controllers
 {
-    public class GroomerController : Controller
+    public class ServiceController : Controller
     {
-        private IGenericRepository<Groomer> repository = null;
-        public GroomerController()
+        private IGenericRepository<Service> repository = null;
+
+        public ServiceController()
         {
-            this.repository = new GenericRepository<Groomer>();
+            this.repository = new GenericRepository<Service>();
         }
 
-        public GroomerController(GenericRepository<Groomer> repository)
+        public ServiceController(GenericRepository<Service> repository)
         {
             this.repository = repository;
         }
-
-        // GET: Groomer
+        // GET: Services
         public ActionResult Index()
         {
-            var groomers = repository.GetAll();
-            return View("Index", groomers);
+            var services = repository.GetAll();
+            return View(services);
         }
 
-        // GET: Groomer/Details/5
+        // GET: Services/Details/5
         public ActionResult Details(Guid id)
         {
             return View();
         }
 
-        // GET: Groomer/Create
+        // GET: Services/Create
         public ActionResult Create()
         {
             return View("Create");
         }
 
-        // POST: Groomer/Create
+        // POST: Services/Create
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
             try
             {
-                Groomer groomer = new Groomer();
-                UpdateModel(groomer);
-                repository.Insert(groomer);
+                Service service = new Service();
+                UpdateModel(service);
+                repository.Insert(service);
                 repository.Save();
                 return RedirectToAction("Index");
             }
@@ -58,47 +58,45 @@ namespace PetGroomingApplication.Controllers
             }
         }
 
-        // GET: Groomer/Edit/5
+        // GET: Services/Edit/5
         public ActionResult Edit(Guid id)
         {
-
-            Groomer groomer = repository.GetById(id);
-            return View("Edit", groomer);
+            Service service = repository.GetById(id);
+            return View("Edit" , service);
         }
 
-        // POST: Groomer/Edit/5
+        // POST: Services/Edit/5
         [HttpPost]
         public ActionResult Edit(Guid id, FormCollection collection)
         {
-            Groomer groomer = new Groomer();
+            Service service = new Service(); 
             try
             {
-                UpdateModel(groomer);
-                repository.Update(groomer);
+                UpdateModel(service);
+                repository.Update(service);
                 repository.Save();
                 return RedirectToAction("Index");
             }
             catch
             {
-                return View("Edit", groomer);
+                return View();
             }
         }
 
-        // GET: Groomer/Delete/5
+        // GET: Services/Delete/5
         public ActionResult Delete(Guid id)
         {
-            Groomer groomer = repository.GetById(id);
-            return View("Delete", groomer);
+            Service service = repository.GetById(id);
+            return View("Delete", service);
         }
 
-        // POST: Groomer/Delete/5
+        // POST: Services/Delete/5
         [HttpPost]
         public ActionResult Delete(Guid id, FormCollection collection)
         {
             try
             {
                 repository.Delete(id);
-                repository.Save();
                 return RedirectToAction("Index");
             }
             catch
