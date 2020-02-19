@@ -184,6 +184,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AppointmentController.cs" />
     <Compile Include="Controllers\GroomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -196,20 +197,68 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Groomer.cs" />
-    <Compile Include="Models\DBObjects\PetGroomingModels.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PetGroomingModels.dbml</DependentUpon>
+    <Compile Include="Migrations\202002121633499_init.cs" />
+    <Compile Include="Migrations\202002121633499_init.Designer.cs">
+      <DependentUpon>202002121633499_init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202002121806266_Users-first-last-name.cs" />
+    <Compile Include="Migrations\202002121806266_Users-first-last-name.Designer.cs">
+      <DependentUpon>202002121806266_Users-first-last-name.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002121810286_Users-first-last-name-another try.cs" />
+    <Compile Include="Migrations\202002121810286_Users-first-last-name-another try.Designer.cs">
+      <DependentUpon>202002121810286_Users-first-last-name-another try.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002121857403_user- add first name.cs" />
+    <Compile Include="Migrations\202002121857403_user- add first name.Designer.cs">
+      <DependentUpon>202002121857403_user- add first name.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002121904380_add appointment.cs" />
+    <Compile Include="Migrations\202002121904380_add appointment.Designer.cs">
+      <DependentUpon>202002121904380_add appointment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002121908277_m1.cs" />
+    <Compile Include="Migrations\202002121908277_m1.Designer.cs">
+      <DependentUpon>202002121908277_m1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002121926110_m2.cs" />
+    <Compile Include="Migrations\202002121926110_m2.Designer.cs">
+      <DependentUpon>202002121926110_m2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002131205305_appointments.cs" />
+    <Compile Include="Migrations\202002131205305_appointments.Designer.cs">
+      <DependentUpon>202002131205305_appointments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002131209151_seed appointments.cs" />
+    <Compile Include="Migrations\202002131209151_seed appointments.Designer.cs">
+      <DependentUpon>202002131209151_seed appointments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002132039390_appointment navigation properties.cs" />
+    <Compile Include="Migrations\202002132039390_appointment navigation properties.Designer.cs">
+      <DependentUpon>202002132039390_appointment navigation properties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002170618200_seed appointments 2.cs" />
+    <Compile Include="Migrations\202002170618200_seed appointments 2.Designer.cs">
+      <DependentUpon>202002170618200_seed appointments 2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002191720470_Add Owner Model.cs" />
+    <Compile Include="Migrations\202002191720470_Add Owner Model.Designer.cs">
+      <DependentUpon>202002191720470_Add Owner Model.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Appointment.cs" />
+    <Compile Include="Models\CalendarViewModel.cs" />
+    <Compile Include="Models\Groomer.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Owner.cs" />
     <Compile Include="Models\Pet.cs" />
     <Compile Include="Models\Service.cs" />
     <Compile Include="Models\Species.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\GroomerRepository.cs" />
+    <Compile Include="Repository\AppointmentRepository.cs" />
+    <Compile Include="Services\CalendarService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -223,11 +272,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Models\DBObjects\PetGroomingModels.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>PetGroomingModels.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -285,6 +329,8 @@
     <Content Include="Views\Pet\Edit.cshtml" />
     <Content Include="Views\Pet\Delete.cshtml" />
     <Content Include="Views\Service\Delete.cshtml" />
+    <Content Include="Views\Appointment\GroomerAppointments.cshtml" />
+    <Content Include="Views\Appointment\GroomerAppointments_raw.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -307,9 +353,42 @@
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Models\DBObjects\PetGroomingModels.dbml.layout">
-      <DependentUpon>PetGroomingModels.dbml</DependentUpon>
-    </None>
+    <EmbeddedResource Include="Migrations\202002121633499_init.resx">
+      <DependentUpon>202002121633499_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002121806266_Users-first-last-name.resx">
+      <DependentUpon>202002121806266_Users-first-last-name.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002121810286_Users-first-last-name-another try.resx">
+      <DependentUpon>202002121810286_Users-first-last-name-another try.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002121857403_user- add first name.resx">
+      <DependentUpon>202002121857403_user- add first name.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002121904380_add appointment.resx">
+      <DependentUpon>202002121904380_add appointment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002121908277_m1.resx">
+      <DependentUpon>202002121908277_m1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002121926110_m2.resx">
+      <DependentUpon>202002121926110_m2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002131205305_appointments.resx">
+      <DependentUpon>202002131205305_appointments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002131209151_seed appointments.resx">
+      <DependentUpon>202002131209151_seed appointments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002132039390_appointment navigation properties.resx">
+      <DependentUpon>202002132039390_appointment navigation properties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002170618200_seed appointments 2.resx">
+      <DependentUpon>202002170618200_seed appointments 2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002191720470_Add Owner Model.resx">
+      <DependentUpon>202002191720470_Add Owner Model.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

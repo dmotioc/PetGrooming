@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace PetGroomingApplication.Models
@@ -79,6 +80,12 @@ namespace PetGroomingApplication.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+        
+        //[Display(Name ="Full name")]
+        //public string FullName { get; set; }
+        
+        //[Display(Name ="Phone")]
+        //public Int64 Contact { get; set; }
     }
 
     public class ResetPasswordViewModel

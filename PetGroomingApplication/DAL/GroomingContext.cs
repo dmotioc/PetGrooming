@@ -20,13 +20,15 @@ namespace PetGroomingApplication.DAL
         public DbSet<Groomer> Groomers { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<Pet> Pets { get; set; }
+        public DbSet<Owner> Owners { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            // prevent table names from being pluralized
-            // modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            base.OnModelCreating(modelBuilder);
+
         }
-    
-    
+
+
     }
 }

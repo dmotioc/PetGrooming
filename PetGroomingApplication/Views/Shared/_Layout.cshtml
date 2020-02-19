@@ -22,6 +22,15 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
+                    <li>@Html.ActionLink(
+                       linkText: "Appointments", 
+                       actionName: "groomers", 
+                       controllerName: "Appointment", 
+                       routeValues: new { id = "92c665ad-a54d-ea11-bf15-083e8eba6e02",
+                                          date="2020-02-13"
+                       },
+                       htmlAttributes: null
+                    )</li>
                     <li>@Html.ActionLink("Groomers", "Index", "Groomer")</li>
                     <li>@Html.ActionLink("Services", "Index", "Service")</li>
                     <li>@Html.ActionLink("Pets", "Index", "Pet")</li>
@@ -34,7 +43,7 @@
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
+        
         <footer>
             <p>&copy; @DateTime.Now.Year -Pet Grooming Application</p>
         </footer>

@@ -1,4 +1,5 @@
-﻿using PetGroomingApplication.GenericRepository;
+﻿using Microsoft.AspNet.Identity.Owin;
+using PetGroomingApplication.GenericRepository;
 using PetGroomingApplication.Models;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,19 @@ namespace PetGroomingApplication.Controllers
     public class GroomerController : Controller
     {
         private IGenericRepository<Groomer> repository = null;
+        private ApplicationUserManager _userManager;
+          public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+
         public GroomerController()
         {
             this.repository = new GenericRepository<Groomer>();
@@ -42,12 +56,33 @@ namespace PetGroomingApplication.Controllers
 
         // POST: Groomer/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Create(RegisterViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = new ApplicationUser
+        //        {
+        //            UserName = model.Email,
+        //            Email = model.Email
+        //            //FullName = model.FullName,
+        //            //Contact = model.Contact
+        //        };
+        //        var result = await UserManager.CreateAsync(user, model.Password);
+
+
+
+
+
+                public ActionResult Create(FormCollection collection)
         {
             try
             {
+                var registeredUser = UserManager.FindByNameAsync(User.Identity.Name);
+ 
                 Groomer groomer = new Groomer();
                 UpdateModel(groomer);
+                //groomer.UserId =  registeredUser.Id;
                 repository.Insert(groomer);
                 repository.Save();
                 return RedirectToAction("Index");

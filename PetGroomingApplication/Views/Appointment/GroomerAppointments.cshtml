@@ -1,0 +1,113 @@
+﻿@model IEnumerable<PetGroomingApplication.Models.CalendarViewModel>
+
+@{
+    ViewBag.Title = "Groomer Appointments";
+}
+
+<h2>Groomer Appointments</h2>
+
+<p>
+    @*@Html.ActionLink("Create New", "Create")*@
+</p>
+
+<h3>@ViewBag.groomerName</h3>
+
+<h4>@ViewBag.Date.ToString("dd-MM-yyyy")</h4>
+<div style="height: 70vh">
+    <div style='position:relative'>
+        <table class="table">
+
+            <tr>
+                @foreach (var item in Model)
+                {
+                    <td>
+                        @{
+                            var parameterValue = item.Time.ToString(@"hh\:mm");
+                        }
+                        @Html.DisplayFor(modelItem => parameterValue)
+                    </td>
+                }
+            </tr>
+            <tr>
+                @foreach (var item in Model)
+                {
+                    string startAppointmentClass = (item.IsAppointmentStart ? "app-start" : "");
+                    <td class="@item.Status @startAppointmentClass">
+                        @*Html.DisplayFor(modelItem => item.AppointmentID)*@
+
+                        <div class="detail-short">
+                            @{
+                                if (item.Status == PetGroomingApplication.Models.Status.Booked)
+                                {
+                                    foreach (string det in item.AppointmentShortDetails)
+                                    {
+                                        <div>@det</div>
+                                    }
+
+                                }
+                            }
+                        </div>
+                    </td>
+
+                }
+            </tr>
+            @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+        </table>
+    </div>
+</div>
+
+<style>
+
+    table td.header {
+    }
+
+    table td.Available {
+        width: 40px;
+        height: 100px;
+        background: lightgrey;
+        border: 1px solid grey;
+    }
+
+    table td.Booked {
+        width: 40px;
+        height: 100px;
+        background: orange;
+        border: 1px solid grey;
+    }
+    table td.app-start {
+        border-left: 3px solid grey !important;
+    }
+    .detail-short {
+        padding: 10px;
+        text-align:center;
+        border: 1px solid DarkSlateGrey;
+        color: DarkSlateGrey;
+        display: none;
+        width: 200px;
+        position: absolute;
+        z-index: 100;
+    }
+</style>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(function () {
+        $('.Booked').hover(
+            function () {
+                console.log("booked.hover");
+                var p = ($(this).position());
+                p.top = p.top + 115;
+                p.left = p.left - 50;
+                $(this).children('div').css(p).show();
+            },
+            function () {
+                console.log("booked.out");
+
+                $(this).children('div.detail-short').hide();
+            }
+        );
+    })
+</script>
+

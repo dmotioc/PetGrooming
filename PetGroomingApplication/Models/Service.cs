@@ -27,6 +27,7 @@ namespace PetGroomingApplication.Models
         [Display(Name = "Service price (EUR)")]
         [DataType(DataType.Currency)]
         public decimal Rate { get; set; }
+        public virtual ICollection<Appointment> Appointments { get; set; }
  
     }
 

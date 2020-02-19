@@ -28,5 +28,8 @@ namespace PetGroomingApplication.Models
         [Display(Name = "Somthing else we should know")]
         [StringLength(1000)]
         public string Comments { get; set; }
+        public virtual ICollection<Appointment> Appointments { get; set; }
+        public virtual Owner Owner { get; set; }
+
     }
 }

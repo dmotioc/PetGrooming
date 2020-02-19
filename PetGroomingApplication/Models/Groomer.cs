@@ -32,5 +32,12 @@ namespace PetGroomingApplication.Models
         [Required]
         [Display(Name = "Specializing (Species)")]
         public Species Specializing { get; set; }
+ 
+        public int UserId { get; set; }
+        
+        public virtual ICollection<Appointment> Appointments { get; set; }
+
+
+
     }
 }
