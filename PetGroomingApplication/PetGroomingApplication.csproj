@@ -188,12 +188,12 @@
     <Compile Include="Controllers\GroomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OwnerController.cs" />
     <Compile Include="Controllers\PetController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="DAL\GroomingContext.cs" />
     <Compile Include="DAL\GroomingInitializer.cs" />
     <Compile Include="GenericRepository\GenericRepository.cs" />
-    <Compile Include="GenericRepository\IGenericRepository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -245,6 +245,10 @@
     <Compile Include="Migrations\202002191720470_Add Owner Model.Designer.cs">
       <DependentUpon>202002191720470_Add Owner Model.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202002201652370_Change Owner.UserId &amp; Groomer.UserId Type.cs" />
+    <Compile Include="Migrations\202002201652370_Change Owner.UserId &amp; Groomer.UserId Type.Designer.cs">
+      <DependentUpon>202002201652370_Change Owner.UserId &amp; Groomer.UserId Type.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Appointment.cs" />
@@ -252,6 +256,7 @@
     <Compile Include="Models\Groomer.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\OwnerRegisterViewModel.cs" />
     <Compile Include="Models\Owner.cs" />
     <Compile Include="Models\Pet.cs" />
     <Compile Include="Models\Service.cs" />
@@ -331,6 +336,8 @@
     <Content Include="Views\Service\Delete.cshtml" />
     <Content Include="Views\Appointment\GroomerAppointments.cshtml" />
     <Content Include="Views\Appointment\GroomerAppointments_raw.cshtml" />
+    <Content Include="Views\Owner\Register.cshtml" />
+    <Content Include="Views\Owner\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -388,6 +395,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202002191720470_Add Owner Model.resx">
       <DependentUpon>202002191720470_Add Owner Model.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002201652370_Change Owner.UserId &amp; Groomer.UserId Type.resx">
+      <DependentUpon>202002201652370_Change Owner.UserId &amp; Groomer.UserId Type.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

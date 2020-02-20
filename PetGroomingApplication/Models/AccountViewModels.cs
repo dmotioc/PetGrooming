@@ -81,12 +81,7 @@ namespace PetGroomingApplication.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
         
-        //[Display(Name ="Full name")]
-        //public string FullName { get; set; }
-        
-        //[Display(Name ="Phone")]
-        //public Int64 Contact { get; set; }
-    }
+     }
 
     public class ResetPasswordViewModel
     {

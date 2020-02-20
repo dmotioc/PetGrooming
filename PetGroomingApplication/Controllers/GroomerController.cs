@@ -13,7 +13,7 @@ namespace PetGroomingApplication.Controllers
     {
         private IGenericRepository<Groomer> repository = null;
         private ApplicationUserManager _userManager;
-          public ApplicationUserManager UserManager
+        public ApplicationUserManager UserManager
         {
             get
             {
@@ -74,12 +74,12 @@ namespace PetGroomingApplication.Controllers
 
 
 
-                public ActionResult Create(FormCollection collection)
+        public ActionResult Create(FormCollection collection)
         {
             try
             {
                 var registeredUser = UserManager.FindByNameAsync(User.Identity.Name);
- 
+
                 Groomer groomer = new Groomer();
                 UpdateModel(groomer);
                 //groomer.UserId =  registeredUser.Id;
