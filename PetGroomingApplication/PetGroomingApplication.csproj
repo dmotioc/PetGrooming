@@ -254,6 +254,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Appointment.cs" />
     <Compile Include="Models\CalendarViewModel.cs" />
+    <Compile Include="Models\GroomerRegisterViewModel.cs" />
     <Compile Include="Models\Groomer.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -263,8 +264,10 @@
     <Compile Include="Models\Service.cs" />
     <Compile Include="Models\Species.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\GroomerRepository.cs" />
     <Compile Include="Repository\AppointmentRepository.cs" />
     <Compile Include="Services\CalendarService.cs" />
+    <Compile Include="Services\RandomPasswordService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -339,6 +342,8 @@
     <Content Include="Views\Appointment\GroomerAppointments_raw.cshtml" />
     <Content Include="Views\Owner\Register.cshtml" />
     <Content Include="Views\Owner\Edit.cshtml" />
+    <Content Include="Views\Groomer\Register.cshtml" />
+    <Content Include="Views\Groomer\SuccessRegister.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

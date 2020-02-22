@@ -98,6 +98,15 @@ namespace PetGroomingApplication.Controllers
             return View(model);
         }
 
+        // GET: Owner/CreateAppointment
+        public ActionResult CreateAppointment()
+        {
+            return View("Register");
+        }
+
+
+
+
         // GET: Owner/Edit/5
         public ActionResult Edit(Guid id)
         {

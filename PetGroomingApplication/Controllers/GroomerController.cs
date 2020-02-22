@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNet.Identity.Owin;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using PetGroomingApplication.GenericRepository;
 using PetGroomingApplication.Models;
+using PetGroomingApplication.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -13,6 +16,7 @@ namespace PetGroomingApplication.Controllers
     {
         private IGenericRepository<Groomer> repository = null;
         private ApplicationUserManager _userManager;
+        //private ApplicationSignInManager _signInManager;
         public ApplicationUserManager UserManager
         {
             get
@@ -24,6 +28,17 @@ namespace PetGroomingApplication.Controllers
                 _userManager = value;
             }
         }
+        //public ApplicationSignInManager SignInManager
+        //{
+        //    get
+        //    {
+        //        return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+        //    }
+        //    private set
+        //    {
+        //        _signInManager = value;
+        //    }
+        //}
 
         public GroomerController()
         {
@@ -48,52 +63,63 @@ namespace PetGroomingApplication.Controllers
             return View();
         }
 
-        // GET: Groomer/Create
-        public ActionResult Create()
+        // GET: Groomer/Register
+        [Authorize(Roles = "admin")]
+        public ActionResult Register()
         {
-            return View("Create");
+            return View("Register");
         }
 
-        // POST: Groomer/Create
+        // POST: Owner/Create with user
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Create(RegisterViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = new ApplicationUser
-        //        {
-        //            UserName = model.Email,
-        //            Email = model.Email
-        //            //FullName = model.FullName,
-        //            //Contact = model.Contact
-        //        };
-        //        var result = await UserManager.CreateAsync(user, model.Password);
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
 
-
-
-
-
-        public ActionResult Create(FormCollection collection)
+        public async Task<ActionResult> Register(GroomerRegisterViewModel model)
         {
-            try
+            if (ModelState.IsValid)
             {
-                var registeredUser = UserManager.FindByNameAsync(User.Identity.Name);
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email
+                };
+                model.Password = RandomPasswordService.GenerateRandomPassword(); // random password
+                var result = await UserManager.CreateAsync(user, model.Password);
 
-                Groomer groomer = new Groomer();
-                UpdateModel(groomer);
-                //groomer.UserId =  registeredUser.Id;
-                repository.Insert(groomer);
-                repository.Save();
-                return RedirectToAction("Index");
+                if (result.Succeeded)
+                {
+                    await UserManager.AddToRoleAsync(user.Id, "staff");
+                    //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                    //create groomer
+                    Groomer groomer = new Groomer();
+                    UpdateModel(groomer);
+                    groomer.UserId = user.Id;
+                    repository.Insert(groomer);
+                    repository.Save();
+                    return RedirectToAction("SuccessRegister", new {email = model.Email, pass= model.Password });
+                }
+                AddErrors(result);
             }
-            catch
-            {
-                return View("Create");
-            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
 
-        // GET: Groomer/Edit/5
+        //GET: Groomer/Success register
+        public ActionResult SuccessRegister(string email, string pass)
+        {
+            
+            // send email to groomer with user & password
+           
+            // show authentivate data only for testing
+            ViewBag.Email = email;
+            ViewBag.Pass = pass;
+            return View("SuccessRegister");
+        }
+
+         // GET: Groomer/Edit/5
         public ActionResult Edit(Guid id)
         {
 
@@ -141,5 +167,13 @@ namespace PetGroomingApplication.Controllers
                 return View("Delete");
             }
         }
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error);
+            }
+        }
+
     }
 }

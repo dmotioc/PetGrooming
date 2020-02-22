@@ -8,31 +8,34 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity;
 
 namespace PetGroomingApplication.Controllers
 {
     public class AppointmentController : Controller
     {
         private AppointmentRepository appointmentRepository = null;
-        private IGenericRepository<Groomer> groomerRepository = null;
+        private GroomerRepository groomerRepository = null;
         private IGenericRepository<Service> serviceRepository = null;
         private IGenericRepository<Pet> petRepository = null;
 
         public AppointmentController()
         {
             this.appointmentRepository = new AppointmentRepository();
-            this.groomerRepository = new GenericRepository<Groomer>();
+            this.groomerRepository = new GroomerRepository();
             this.serviceRepository = new GenericRepository<Service>();
             this.petRepository = new GenericRepository<Pet>();
         }
 
         // GET: Appointment
+        [Authorize(Roles = "admin, staff")]
         public ActionResult Index()
         {
             return View();
         }
 
         // GET: Appointment/Details/5
+        [Authorize(Roles = "admin, staff")]
         public ActionResult Details(Guid id)
         {
             Appointment appointment = appointmentRepository.GetById(id);
@@ -40,16 +43,18 @@ namespace PetGroomingApplication.Controllers
         }
         
         [HttpGet]
-        [Route("appointment/groomers/{id}")]
-        public ActionResult GroomerAppointments(Guid id, DateTime date)
+        [Route("appointment/groomer")]
+        [Authorize(Roles = "staff")]
+        public ActionResult GroomerAppointments(DateTime date)
         {
             // List<Appointment> appointments = appointmentRepository.GetAppointmentsByGroomerByDate(id, date.Date);
+            string userId = User.Identity.GetUserId();
+            Guid groomerID = groomerRepository.GetIdByUserId(userId);
             CalendarService calendar = new CalendarService();
-            List<CalendarViewModel> appointmentsCalendar = calendar.GetAppointmentsCallendarByGroomerByDate(id, date.Date);
+            List<CalendarViewModel> appointmentsCalendar = calendar.GetAppointmentsCallendarByGroomerByDate(groomerID, date.Date);
             ViewBag.Date = date.Date;
-            ViewBag.groomerID = id;
-            ViewBag.groomerName = groomerRepository.GetById(id).Name;
-            
+            ViewBag.groomerID = groomerID;
+            ViewBag.groomerName = groomerRepository.GetById(ViewBag.groomerID = groomerID).Name;
             return View("GroomerAppointments", appointmentsCalendar);
         }
         

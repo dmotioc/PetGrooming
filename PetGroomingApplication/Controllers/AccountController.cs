@@ -79,6 +79,20 @@ namespace PetGroomingApplication.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    if (String.IsNullOrEmpty(returnUrl))
+                    {
+                        var user = await UserManager.FindAsync(model.Email, model.Password);
+                        var roles = await UserManager.GetRolesAsync(user.Id);
+                        if (roles.Contains("user"))
+                        {
+                            returnUrl = "/Owner/CreateAppointment";
+                        }
+                        else if (roles.Contains("staff"))
+                        {
+                            returnUrl = "/Appointment/Groomer?date=" + DateTime.Today.ToString("yyyy-MM-dd");
+                        }
+ 
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -162,7 +176,7 @@ namespace PetGroomingApplication.Controllers
 
                 if (result.Succeeded)
                 {
-                     await UserManager.AddToRoleAsync(user.Id, "User");
+                    await UserManager.AddToRoleAsync(user.Id, "User");
                     //var registeredUser = await UserManager.FindByNameAsync(model.Email);
                     //registeredUser.Id;
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
