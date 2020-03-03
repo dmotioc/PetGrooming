@@ -1,5 +1,7 @@
-﻿using PetGroomingApplication.GenericRepository;
+﻿using Microsoft.AspNet.Identity;
+using PetGroomingApplication.GenericRepository;
 using PetGroomingApplication.Models;
+using PetGroomingApplication.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,47 +12,52 @@ namespace PetGroomingApplication.Controllers
 {
     public class PetController : Controller
     {
-        private IGenericRepository<Pet> repository = null;
+        private PetRepository repository = null;
+        private OwnerRepository ownerRepository = null;
+        private Guid ownerID = Guid.Empty;
 
         public PetController()
         {
-            this.repository = new GenericRepository<Pet>();
+            this.repository = new PetRepository();
+            this.ownerRepository = new OwnerRepository();
         }
 
-        public PetController(GenericRepository<Pet> repository)
-        {
-            this.repository = repository;
-        }
+        //public PetController(PetRepository repository)
+        //{
+        //    this.repository = repository;
+        //}
+
         // GET: Pet
+        [Authorize(Roles = "user")]
         public ActionResult Index()
         {
-            var pets = repository.GetAll();
+            string userId = User.Identity.GetUserId();
+            ownerID = ownerRepository.GetIdByUserId(userId);
+            var pets = repository.GetByOwner(ownerID);
             return View("Index", pets);
         }
 
-        // GET: Pet/Details/5
-        public ActionResult Details(Guid id)
-        {
-            return View();
-        }
-
         // GET: Pet/Create
+        [Authorize(Roles = "user")]
         public ActionResult Create()
         {
+            ViewBag.returnUrl = Request.UrlReferrer.AbsolutePath;
             return View("Create");
         }
 
-        // POST: Pet/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
+         // POST: Pet/Create
+         [HttpPost]
+         [Authorize(Roles = "user")]
+         public ActionResult Create(Pet pet, string returnUrl)
+         {
             try
             {
-                Pet pet = new Pet();
-                UpdateModel(pet);
+                string userId = User.Identity.GetUserId();
+                ownerID = ownerRepository.GetIdByUserId(userId); 
+                pet.OwnerID = ownerID;
                 repository.Insert(pet);
                 repository.Save();
-                return RedirectToAction("Index");
+                return Redirect(returnUrl);
             }
             catch
             {
@@ -59,16 +66,18 @@ namespace PetGroomingApplication.Controllers
         }
 
         // GET: Pet/Edit/5
+        [Authorize(Roles = "user")]
         public ActionResult Edit(Guid id)
         {
             Pet pet = repository.GetById(id);
             return View("Edit", pet);
         }
 
-        // POST: Pet/Edit/5
-        [HttpPost]
-        public ActionResult Edit(Guid id, FormCollection collection)
-        {
+         // POST: Pet/Edit/5
+         [HttpPost]
+         [Authorize(Roles = "user")]
+         public ActionResult Edit(Guid id, FormCollection collection)
+         {
             Pet pet = new Pet();
             try
             {
@@ -84,6 +93,7 @@ namespace PetGroomingApplication.Controllers
         }
 
         // GET: Pet/Delete/5
+        [Authorize(Roles = "user")]
         public ActionResult Delete(Guid id)
         {
             Pet pet = repository.GetById(id);
@@ -92,6 +102,7 @@ namespace PetGroomingApplication.Controllers
 
         // POST: Pet/Delete/5
         [HttpPost]
+        [Authorize(Roles = "user")]
         public ActionResult Delete(Guid id, FormCollection collection)
         {
             try

@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using Newtonsoft.Json.Linq;
 using PetGroomingApplication.GenericRepository;
 using PetGroomingApplication.Models;
+using PetGroomingApplication.Repository;
+using PetGroomingApplication.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +16,12 @@ namespace PetGroomingApplication.Controllers
 {
     public class OwnerController : Controller
     {
-        private IGenericRepository<Owner> repository = null;
+        private OwnerRepository ownerRepository = null;
+        private GroomerRepository groomerRepository = null;
+        private ServiceRepository serviceRepository = null;
+        private PetRepository petRepository = null;
+        private AppointmentRepository appointmentRepository = null;
+
         private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
         public ApplicationUserManager UserManager
@@ -40,7 +48,11 @@ namespace PetGroomingApplication.Controllers
         }
         public OwnerController()
         {
-            this.repository = new GenericRepository<Owner>();
+            this.ownerRepository = new OwnerRepository();
+            this.groomerRepository = new GroomerRepository();
+            this.serviceRepository = new ServiceRepository();
+            this.petRepository = new PetRepository();
+            this.appointmentRepository = new AppointmentRepository();
         }
 
 
@@ -50,13 +62,8 @@ namespace PetGroomingApplication.Controllers
             return View();
         }
 
-        // GET: Owner/Details/5
-        public ActionResult Details(Guid id)
-        {
-            return View();
-        }
-
-        // GET: Owner/Create
+ 
+        // GET: Owner/Register
         public ActionResult Register()
         {
             return View("Register");
@@ -87,8 +94,8 @@ namespace PetGroomingApplication.Controllers
                     Owner owner = new Owner();
                     UpdateModel(owner);
                     owner.UserId = user.Id;
-                    repository.Insert(owner);
-                    repository.Save();
+                    ownerRepository.Insert(owner);
+                    ownerRepository.Save();
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
@@ -98,33 +105,28 @@ namespace PetGroomingApplication.Controllers
             return View(model);
         }
 
-        // GET: Owner/CreateAppointment
-        public ActionResult CreateAppointment()
+        // GET: Owner/Edit
+        [Authorize(Roles = "user")]
+        public ActionResult Edit()
         {
-            return View("Register");
-        }
-
-
-
-
-        // GET: Owner/Edit/5
-        public ActionResult Edit(Guid id)
-        {
-            Owner owner = repository.GetById(id);
+            Guid ownerID = GetIDByUserId();
+            Owner owner = ownerRepository.GetById(ownerID);
             return View(owner);
         }
 
-        // POST: Owner/Edit/5
+        // POST: Owner/Edit
         [HttpPost]
-        public ActionResult Edit(Guid id, FormCollection collection)
+        [Authorize(Roles = "user")]
+        public ActionResult Edit(FormCollection collection)
         {
-                Owner owner = new Owner();
-           try
+            Owner owner = new Owner();
+            owner.UserId = User.Identity.GetUserId(); ;
+            try
             {
                 UpdateModel(owner);
-                repository.Update(owner);
-                repository.Save();
-                return RedirectToAction("Index");
+                ownerRepository.Update(owner);
+                ownerRepository.Save();
+                return RedirectToAction("Index", "Home");
             }
             catch
             {
@@ -132,7 +134,128 @@ namespace PetGroomingApplication.Controllers
             }
         }
 
+        // GET: /Owner/CreateAppointment
+        [Authorize(Roles = "user")]
+        public ActionResult CreateAppointment()
+        {
+            Guid ownerID = GetIDByUserId();
+            Appointment appointment = Session["Appointment"] as Appointment ?? new Appointment();
+            CreateAppointmentListInitializer(appointment, ownerID);
+            return View("CreateAppointment", appointment);
+        }
+
+ 
+
+        // POST: /Owner/CreateAppointment
+        [Authorize(Roles = "user")]
+        [HttpPost]
+        public ActionResult CreateAppointment(Appointment appointment)
+        {
+            if (ModelState.IsValid)
+            {
+                if (!isAppointmentPossible(appointment))
+                {
+                    Guid ownerID = GetIDByUserId();
+                    CreateAppointmentListInitializer(appointment, ownerID);
+                    ModelState.AddModelError("", "There is not enough available time for this service at this time!");
+                    return View("CreateAppointment", appointment);
+                }
+                // save appointment 
+                appointmentRepository.Insert(appointment);
+                appointmentRepository.Save();
+                Session["Appointment"] = null;
+                return View("AppointmentRegisterSuccess");
+            }
+            ModelState.AddModelError("", "Invalid input!");
+            return View("CreateAppointment", appointment);
+
+        }
+
+
+        // Ajax POST: /Owner/GetGroomersAndServices
+        [HttpPost]
+        [Authorize(Roles = "user")]
+        public PartialViewResult GetGroomersAndServices(string id)
+        {
+            Appointment appointment = Session["Appointment"] as Appointment ?? new Appointment();
+            if (!String.IsNullOrEmpty(id))
+            {
+                Guid petID = Guid.Parse(id);
+                setServicesAndGroomerSelectListByPet(petID);
+
+                appointment.PetID = petID;
+                Session["Appointment"] = appointment;
+            }
+            return PartialView("GetGroomersAndServicesPartial", appointment);
+        }
+
+        // Ajax POST: /Owner/ServiceDetails
+        [HttpPost]
+        [Authorize(Roles = "user")]
+        public PartialViewResult ServiceDetails(string id)
+        {
+            Appointment appointment = Session["Appointment"] as Appointment ?? new Appointment();
+            if (!String.IsNullOrEmpty(id))
+            {
+                Guid serviceID = Guid.Parse(id);
+                appointment.ServiceID = serviceID;
+                appointment.Service = serviceRepository.GetById(serviceID);
+                Session["Appointment"] = appointment;
+            }
+            return PartialView("GetServiceDetailsPartial", appointment);
+
+        }
+
+        // Ajax POST: /Owner/GroomerCalendar
+        [HttpPost]
+        [Authorize(Roles = "user")]
+        public PartialViewResult GroomerCalendar(string id)
+        {
+            if (!String.IsNullOrEmpty(id))
+            {
+                Guid groomerID = Guid.Parse(id);
+                Groomer groomer = groomerRepository.GetById(groomerID);
+                ViewBag.groomerName = groomer.Name;
+                Appointment appointment = Session["Appointment"] as Appointment ?? new Appointment();
+                appointment.GroomerID = groomerID;
+                appointment.Groomer = groomerRepository.GetById(groomerID);
+                Session["Appointment"] = appointment;
+
+                ViewBag.calendar = GetGroomerCalendarForDateRange(groomer);
+
+                return PartialView("GetGroomerCalendarPartial");
+            }
+            return default;
+        }
+
+        // Ajax Get: /Owner/CheckAvailability
+        [HttpPost]
+        [Authorize(Roles = "user")]
+        public ActionResult CheckAvailability(Appointment appointment)
+        {
+            bool output = isAppointmentPossible(appointment);
+            return Content(output.ToString().ToLower());
+        }
+        public ActionResult GroomerCalendar_TEST()
+        {
+            Guid groomerID = new Guid("92C665AD-A54D-EA11-BF15-083E8EBA6E02");
+            Groomer groomer = groomerRepository.GetById(groomerID);
+            var date1 = new DateTime(2020, 2, 13);
+            var date2 = new DateTime(2020, 2, 14);
+
+            var calendar = new Dictionary<DateTime, List<AvailabilityCalendarViewModel>>() {
+                {date1,  GetGroomerCalendarByDay(date1, groomer)},
+                {date2,  GetGroomerCalendarByDay(date2, groomer)},
+            };
+            //var calendar = GetGroomerCalendarByDay(date, groomer);
+            //ViewBag.Date = date.Date;
+            ViewBag.groomerName = groomer.Name;
+            ViewBag.calendar = calendar;
+            return View("GetGroomerCalendarPartial_TEST", calendar);
+        }
+
         // GET: Owner/Delete/5
+        [Authorize(Roles = "admin")]
         public ActionResult Delete(Guid id)
         {
             return View();
@@ -140,6 +263,7 @@ namespace PetGroomingApplication.Controllers
 
         // POST: Owner/Delete/5
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public ActionResult Delete(Guid id, FormCollection collection)
         {
             try
@@ -154,6 +278,10 @@ namespace PetGroomingApplication.Controllers
             }
         }
 
+
+        //  ---     privates    ---   //
+
+
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
@@ -161,6 +289,84 @@ namespace PetGroomingApplication.Controllers
                 ModelState.AddModelError("", error);
             }
         }
+
+        private Guid GetIDByUserId()
+        {
+            string userId = User.Identity.GetUserId();
+            return ownerRepository.GetIdByUserId(userId);
+        }
+        private void CreateAppointmentListInitializer(Appointment appointment, Guid ownerID)
+        {
+            List<Pet> pets = petRepository.GetByOwner(ownerID);
+            SelectList lstPets = new SelectList(pets, "PetID", "Name");
+            ViewData["myPets"] = lstPets;
+
+            if (appointment.PetID != Guid.Empty)
+            {
+                setServicesAndGroomerSelectListByPet(appointment.PetID);
+            }
+            else
+            {
+                setServicesAndGroomerSelectListEmpty();
+            }
+
+            if (appointment.GroomerID != Guid.Empty) { 
+                Groomer groomer = groomerRepository.GetById(appointment.GroomerID);
+                ViewBag.calendar = GetGroomerCalendarForDateRange(groomer);
+            }
+
+        }
+        private void setServicesAndGroomerSelectListByPet(Guid petID)
+        {
+            Species species = petRepository.GetById(petID).Species;
+            List<Service> services = serviceRepository.GetBySpecies(species);
+            List<Groomer> groomers = groomerRepository.GetBySpecialization(species);
+            SelectList lstServices = new SelectList(services, "ServiceID", "Name");
+            SelectList lstGroomers = new SelectList(groomers, "GroomerID", "Name");
+            ViewData["services"] = lstServices;
+            ViewData["groomers"] = lstGroomers;
+        }
+        private void setServicesAndGroomerSelectListEmpty()
+        {
+            List<Service> services = new List<Service>();
+            List<Groomer> groomers = new List<Groomer>();
+            SelectList lstServices = new SelectList(services, "ServiceID", "Name");
+            SelectList lstGroomers = new SelectList(groomers, "GroomerID", "Name");
+            ViewData["services"] = lstServices;
+            ViewData["groomers"] = lstGroomers;
+        }
+
+        private Dictionary<DateTime, List<AvailabilityCalendarViewModel>> GetGroomerCalendarForDateRange(Groomer groomer)
+        {
+
+            // calendar for x days , start from today
+            var calendar = new Dictionary<DateTime, List<AvailabilityCalendarViewModel>>();
+            foreach (DateTime date in CalendarService.DateRange(DateTime.Today.Date, 7))
+            {
+                calendar.Add(date, GetGroomerCalendarByDay(date, groomer));
+            };
+            return calendar;
+        }
+
+        private List<AvailabilityCalendarViewModel> GetGroomerCalendarByDay(DateTime date, Groomer groomer)
+        {
+            List<Appointment> appointments = appointmentRepository.GetAppointmentsByGroomerByDate(groomer.GroomerID, date);
+            TimeSpan startTime = groomer.StartWorkTime.TimeOfDay;
+            TimeSpan endTime = groomer.EndWorkTime.TimeOfDay;
+            List<AvailabilityCalendarViewModel> calendar = CalendarService.AvailabilityCalendar(appointments, startTime, endTime);
+            return calendar;
+        }
+
+        private bool isAppointmentPossible(Appointment appointment)
+        {
+            DateTime dateTime = appointment.DateTime;
+            Groomer groomer = groomerRepository.GetById(appointment.GroomerID);
+            List<AvailabilityCalendarViewModel> calendar = GetGroomerCalendarByDay(dateTime.Date, groomer);
+
+            int serviceLength = serviceRepository.GetServiceLength(appointment.ServiceID);
+            return CalendarService.IsAppointmentPosible(appointment, serviceLength, calendar);
+        }
+
 
     }
 }

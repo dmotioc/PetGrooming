@@ -30,6 +30,5 @@ namespace PetGroomingApplication.Models
 
         public virtual ICollection<Pet> Pets { get; set; }
 
-
-    }
+     }
 }

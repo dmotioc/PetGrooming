@@ -1,0 +1,124 @@
+﻿@model dynamic
+
+@*Dictionary<DateTime, IEnumerable<PetGroomingApplication.Models.AvailabilityCalendarViewModel>>*@
+
+<h2>Availability calendar</h2>
+@Html.TextBox("DateTime", "", new { htmlAttributes = new { width = "50" } })
+<div id="divAvailable"></div>
+<div style="height: 70vh">
+    <div style='position:relative'>
+        <table class="calendar">
+            @{
+                bool displayHeader = true;
+                foreach (var pair in Model)
+                {
+                    DateTime date = pair.Key;
+                    var calendarPerDay = pair.Value;
+                    if (displayHeader)
+                    {
+                        <tr>
+                            <th>Date</th>
+                            @foreach (var item in calendarPerDay)
+                            {
+                                <th>
+                                    @{
+                                        var parameterValue = item.Time.ToString(@"hh\:mm");
+                                    }
+                                    @Html.DisplayFor(modelItem => parameterValue)
+                                </th>
+                            }
+                        </tr>
+                        displayHeader = false;
+                    }
+                    <tr>
+                        <td class="date">@date.ToString("dd-MM-yyyy")</td>
+                        @foreach (var item in calendarPerDay)
+                        {
+
+                            DateTime dateTime = date + item.Time;
+                            string dataAttribute = (item.Status == PetGroomingApplication.Models.Status.Available
+                                 ? $"data-date = '{dateTime.ToString()}'"
+                                 : ""
+                             );
+                            string cls= item.Status.ToString() + (item.Status == PetGroomingApplication.Models.Status.Available ? " pointer" : "");
+                            <td class="@cls" @Html.Raw(dataAttribute)>
+                                <text>@(item.Status == PetGroomingApplication.Models.Status.Booked ? "x" : "")</text>
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+        </table>
+        <div class="legend">
+            <div class="Available"></div> - Available &emsp;
+            <div class="Booked">x</div> - Not available
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $(".Available").click(function () {
+                const date = $(this).attr('data-date');
+                $('#DateTime').val(date);
+ /*              $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    url: '/Owner/CheckAvailability',
+                    data: data,
+                    dataType: 'text',
+                    success: function (data, textStatus, jqXHR) {
+                        $("#divAvailable").html('SUCCESS');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) { }
+                });*/
+            });
+        })
+    </script>
+}
+
+<style>
+
+    table.calendar td {
+        width: 40px;
+        border: 1px solid #ddd;
+        text-align: center;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+        table.calendar td.date {
+            width: 10rem;
+        }
+
+    table.calendar th {
+        text-align: center;
+        font-stretch: extra-condensed;
+    }
+
+    .Available {
+        background-color: yellowgreen;
+    }
+    .pointer {
+        cursor: pointer;
+    }
+    .Booked {
+        background: #ddd;
+        color: #999;
+    }
+
+    div.legend {
+        display: flex;
+        margin-top: 20px;
+    }
+
+    div.legend div {
+        border: 1px solid #eee;
+        width: 20px;
+        height:20px;
+        text-align:center;
+        margin-right: 10px;
+    }
+</style>
+

@@ -6,6 +6,31 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        footer {
+            height: 50px;
+            background: PapayaWhip;
+        }
+
+        body {
+            display: table;
+            width: 100%;
+        }
+
+        footer {
+            display: table-row;
+        }
+    </style>
+
 
 </head>
 <body>
@@ -28,23 +53,20 @@
                         {
                             <li>@Html.ActionLink("Groomers", "Index", "Groomer")</li>
                             <li>@Html.ActionLink("Services", "Index", "Service")</li>
-                            <li>@Html.ActionLink("Pets", "Index", "Pet")</li>
-                        }
+                         }
                     }
 
                     @{
                         if (User.IsInRole("staff"))
                         {
+                            string calendarDate = DateTime.Today.ToString("yyyy-MM-dd");
                             <li>
                                 @Html.ActionLink(
-                                linkText: "Appointments",
-                                actionName: "Groomer",
-                                controllerName: "Appointment",
-                                routeValues: new
-                                     {
-                                                                        date = "2020-02-13"
-                                },
-                                htmlAttributes: null
+                                    linkText: "Appointments",
+                                    actionName: "Calendar",
+                                    controllerName: "Groomer",
+                                    routeValues: new { date = calendarDate },
+                                    htmlAttributes: null
                                 )
                             </li>
                         }
@@ -54,6 +76,8 @@
                     @{
                         if (User.IsInRole("user"))
                         {
+                            <li>@Html.ActionLink("Appointment", "CreateAppointment", "Owner")</li>
+                            <li>@Html.ActionLink("My pets", "Index", "Pet")</li>
                             <li>@Html.ActionLink("Edit owner profile", "Edit", "Owner")</li>
 
                         }
@@ -68,13 +92,14 @@
     <div class="container body-content">
         @RenderBody()
 
-        <footer>
-            <p>&copy; @DateTime.Now.Year -Pet Grooming Application</p>
-        </footer>
     </div>
+    <footer>
+        <p>&copy; @DateTime.Now.Year -Pet Grooming Application</p>
+    </footer>
 
-    @Scripts.Render("~/bundles/jquery")
+    @*@Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    @RenderSection("scripts", required: false)*@
 </body>
 </html>

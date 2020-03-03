@@ -42,35 +42,35 @@ namespace PetGroomingApplication.Migrations
             // services.ForEach(s => context.Services.AddOrUpdate(s));
             // context.SaveChanges();
 
-            // var pets = new List<Pet>
-            // {
-            //     new Pet {  PetID = new Guid("9bc665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Rex", Species = Species.Dog, Breed="German Shepherd", Age=2 },
-            //     new Pet {  PetID = new Guid("9cc665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Napoleon", Species = Species.Dog, Breed="Chiwawa", Age=3 },
-            //     new Pet {  PetID = new Guid("9dc665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Spot", Species = Species.Dog, Breed="Dalmatian", Age=5 },
-            //     new Pet {  PetID = new Guid("9ec665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Romulus", Species = Species.Dog, Breed="Labrador", Age=1 },
-            //     new Pet {  PetID = new Guid("9fc665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Bella", Species = Species.Dog, Breed="Border Collie", Age=6 },
-            //     new Pet {  PetID = new Guid("a0c665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Booby", Species = Species.Dog, Breed="Mops", Age=4 },
-            //     new Pet {  PetID = new Guid("a1c665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Terry", Species = Species.Dog, Breed="Yorkshire Terrier", Age=5 },
-            //     new Pet {  PetID = new Guid("a2c665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Lara", Species = Species.Dog, Breed="German Shepherd", Age=10 },
-            //     new Pet {  PetID = new Guid("a3c665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Tom", Species = Species.Cat, Breed="British Shorthair", Age=5 },
-            //     new Pet {  PetID = new Guid("a4c665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Leo", Species = Species.Cat, Breed="Birman", Age=2 },
-            //     new Pet {  PetID = new Guid("a5c665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Katty", Species = Species.Cat, Breed="Domestic Shorthair", Age=6 },
-            //     new Pet {  PetID = new Guid("a6c665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Bruno", Species = Species.Cat, Breed="Persian", Age=4 }
-            // };
-            // pets.ForEach(p => context.Pets.AddOrUpdate(p));
-            // context.SaveChanges();
+             var pets = new List<Pet>
+             {
+                 new Pet {  PetID = new Guid("9bc665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Rex", Species = Species.Dog, Breed="German Shepherd", Age=2, OwnerID = new Guid("d5d67940-0254-ea11-bf16-083e8eba6e02")},
+                 new Pet {  PetID = new Guid("9cc665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Napoleon", Species = Species.Dog, Breed="Chiwawa", Age=3, OwnerID = new Guid("d5d67940-0254-ea11-bf16-083e8eba6e02") },
+                 new Pet {  PetID = new Guid("9dc665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Spot", Species = Species.Dog, Breed="Dalmatian", Age=5, OwnerID = new Guid("d5d67940-0254-ea11-bf16-083e8eba6e02") },
+                 new Pet {  PetID = new Guid("9ec665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Romulus", Species = Species.Dog, Breed="Labrador", Age=1, OwnerID = new Guid("d5d67940-0254-ea11-bf16-083e8eba6e02") },
+            //     new Pet {  PetID = new Guid("9fc665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Bella", Species = Species.Dog, Breed="Border Collie", Age=6 , OwnerID = new Guid("")},
+            //     new Pet {  PetID = new Guid("a0c665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Booby", Species = Species.Dog, Breed="Mops", Age=4, OwnerID = "" },
+            //     new Pet {  PetID = new Guid("a1c665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Terry", Species = Species.Dog, Breed="Yorkshire Terrier", Age=5, OwnerID = "" },
+            //     new Pet {  PetID = new Guid("a2c665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Lara", Species = Species.Dog, Breed="German Shepherd", Age=10, OwnerID = "" },
+            //     new Pet {  PetID = new Guid("a3c665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Tom", Species = Species.Cat, Breed="British Shorthair", Age=5, OwnerID = "" },
+            //     new Pet {  PetID = new Guid("a4c665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Leo", Species = Species.Cat, Breed="Birman", Age=2 , OwnerID = ""},
+            //     new Pet {  PetID = new Guid("a5c665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Katty", Species = Species.Cat, Breed="Domestic Shorthair", Age=6 , OwnerID = ""},
+            //     new Pet {  PetID = new Guid("a6c665ad-a54d-ea11-bf15-083e8eba6e02"),Name  ="Bruno", Species = Species.Cat, Breed="Persian", Age=4, OwnerID = "" }
+             };
+             pets.ForEach(p => context.Pets.AddOrUpdate(p));
+             context.SaveChanges();
 
-            
-            //var appointments = new List<Appointment>
-            //{
-                    //new Appointment {AppointmentID = new Guid(), ServiceID= new Guid("95c665ad-a54d-ea11-bf15-083e8eba6e02"), DateTime=new DateTime(2020,02,13, 10,00,0),GroomerID=new Guid("92c665ad-a54d-ea11-bf15-083e8eba6e02"), PetID=new Guid("9cc665ad-a54d-ea11-bf15-083e8eba6e02")},
-                    //new Appointment {AppointmentID = new Guid(), ServiceID= new Guid("96c665ad-a54d-ea11-bf15-083e8eba6e02"), DateTime=new DateTime(2020,02,13, 13,00,0),GroomerID=new Guid("92c665ad-a54d-ea11-bf15-083e8eba6e02"), PetID=new Guid("9ec665ad-a54d-ea11-bf15-083e8eba6e02")},
-                    //new Appointment {AppointmentID = new Guid(), ServiceID= new Guid("95c665ad-a54d-ea11-bf15-083e8eba6e02"), DateTime=new DateTime(2020,02,14, 10,00,0),GroomerID=new Guid("92c665ad-a54d-ea11-bf15-083e8eba6e02"), PetID=new Guid("9cc665ad-a54d-ea11-bf15-083e8eba6e02")},
-                    //new Appointment {AppointmentID = new Guid(), ServiceID= new Guid("95c665ad-a54d-ea11-bf15-083e8eba6e02"), DateTime=new DateTime(2020,02,13, 10,00,0),GroomerID=new Guid("93c665ad-a54d-ea11-bf15-083e8eba6e02"), PetID=new Guid("9cc665ad-a54d-ea11-bf15-083e8eba6e02")},
-                    //new Appointment {AppointmentID = new Guid(), ServiceID= new Guid("97c665ad-a54d-ea11-bf15-083e8eba6e02"), DateTime=new DateTime(2020,02,13, 08,00,0),GroomerID=new Guid("92c665ad-a54d-ea11-bf15-083e8eba6e02"), PetID=new Guid("9cc665ad-a54d-ea11-bf15-083e8eba6e02")},
-            //};
-            //appointments.ForEach(a => context.Appointments.AddOrUpdate(a));
-            //context.SaveChanges();
+
+            var appointments = new List<Appointment>
+            {
+            new Appointment {AppointmentID = new Guid(), ServiceID= new Guid("95c665ad-a54d-ea11-bf15-083e8eba6e02"), DateTime=new DateTime(2020,02,13, 10,00,0),GroomerID=new Guid("92c665ad-a54d-ea11-bf15-083e8eba6e02"), PetID=new Guid("9cc665ad-a54d-ea11-bf15-083e8eba6e02")},
+            new Appointment {AppointmentID = new Guid(), ServiceID= new Guid("96c665ad-a54d-ea11-bf15-083e8eba6e02"), DateTime=new DateTime(2020,02,13, 13,00,0),GroomerID=new Guid("92c665ad-a54d-ea11-bf15-083e8eba6e02"), PetID=new Guid("9ec665ad-a54d-ea11-bf15-083e8eba6e02")},
+            new Appointment {AppointmentID = new Guid(), ServiceID= new Guid("95c665ad-a54d-ea11-bf15-083e8eba6e02"), DateTime=new DateTime(2020,02,14, 10,00,0),GroomerID=new Guid("92c665ad-a54d-ea11-bf15-083e8eba6e02"), PetID=new Guid("9cc665ad-a54d-ea11-bf15-083e8eba6e02")},
+            new Appointment {AppointmentID = new Guid(), ServiceID= new Guid("95c665ad-a54d-ea11-bf15-083e8eba6e02"), DateTime=new DateTime(2020,02,13, 10,00,0),GroomerID=new Guid("93c665ad-a54d-ea11-bf15-083e8eba6e02"), PetID=new Guid("9cc665ad-a54d-ea11-bf15-083e8eba6e02")},
+            new Appointment {AppointmentID = new Guid(), ServiceID= new Guid("97c665ad-a54d-ea11-bf15-083e8eba6e02"), DateTime=new DateTime(2020,02,13, 08,00,0),GroomerID=new Guid("92c665ad-a54d-ea11-bf15-083e8eba6e02"), PetID=new Guid("9cc665ad-a54d-ea11-bf15-083e8eba6e02")},
+            };
+            appointments.ForEach(a => context.Appointments.AddOrUpdate(a));
+            context.SaveChanges();
         }
     }
 }

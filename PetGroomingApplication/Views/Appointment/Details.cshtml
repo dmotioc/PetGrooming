@@ -1,0 +1,103 @@
+﻿@model PetGroomingApplication.Models.Appointment
+
+@{
+    ViewBag.Title = "Appointment details";
+}
+<h2>Appointment Details</h2>
+<h5>Groomer @Html.DisplayFor(model => model.Groomer.Name)</h5>
+
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateTime)
+        </dd>
+
+        <dt>
+            Service @Html.DisplayNameFor(model => model.Service.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Service.Name) ( @Html.DisplayFor(model => model.Service.DurationInMinutes) min)
+        </dd>
+
+        <dt>
+            Pet @Html.DisplayNameFor(model => model.Pet.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pet.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Pet.Breed)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pet.Breed)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Pet.Age)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pet.Age) year
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Pet.Comments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pet.Comments)
+        </dd>
+    </dl>
+
+    <h5> Owner Details:</h5>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Pet.Owner.FullName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pet.Owner.FullName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Pet.Owner.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pet.Owner.Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Pet.Owner.Phone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pet.Owner.Phone)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.AppointmentID }) |*@
+    @{
+        string returnToDate = Model.DateTime.ToString("yyy-MM-dd");
+    }
+    @Html.ActionLink(
+        linkText: "Back to Calendar",
+        actionName: "Calendar",
+        controllerName: "Groomer",
+        routeValues: new { date = returnToDate },
+        htmlAttributes: null
+    )
+</p>

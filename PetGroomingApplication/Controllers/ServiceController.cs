@@ -97,6 +97,7 @@ namespace PetGroomingApplication.Controllers
             try
             {
                 repository.Delete(id);
+                repository.Save();
                 return RedirectToAction("Index");
             }
             catch

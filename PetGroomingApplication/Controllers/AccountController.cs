@@ -75,13 +75,13 @@ namespace PetGroomingApplication.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
                     if (String.IsNullOrEmpty(returnUrl))
                     {
-                        var user = await UserManager.FindAsync(model.Email, model.Password);
+                        var user = await UserManager.FindAsync(model.UserName, model.Password);
                         var roles = await UserManager.GetRolesAsync(user.Id);
                         if (roles.Contains("user"))
                         {
@@ -89,7 +89,7 @@ namespace PetGroomingApplication.Controllers
                         }
                         else if (roles.Contains("staff"))
                         {
-                            returnUrl = "/Appointment/Groomer?date=" + DateTime.Today.ToString("yyyy-MM-dd");
+                            returnUrl = "/Groomer/Calendar?date=" + DateTime.Today.ToString("yyyy-MM-dd");
                         }
  
                     }

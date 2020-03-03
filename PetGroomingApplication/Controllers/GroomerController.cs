@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.Owin;
 using PetGroomingApplication.GenericRepository;
 using PetGroomingApplication.Models;
+using PetGroomingApplication.Repository;
 using PetGroomingApplication.Services;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,9 @@ namespace PetGroomingApplication.Controllers
 {
     public class GroomerController : Controller
     {
-        private IGenericRepository<Groomer> repository = null;
+        private GroomerRepository repository = null;
+        private AppointmentRepository appointmentRepository = null;
         private ApplicationUserManager _userManager;
-        //private ApplicationSignInManager _signInManager;
         public ApplicationUserManager UserManager
         {
             get
@@ -28,29 +29,39 @@ namespace PetGroomingApplication.Controllers
                 _userManager = value;
             }
         }
-        //public ApplicationSignInManager SignInManager
-        //{
-        //    get
-        //    {
-        //        return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-        //    }
-        //    private set
-        //    {
-        //        _signInManager = value;
-        //    }
-        //}
-
+ 
         public GroomerController()
         {
-            this.repository = new GenericRepository<Groomer>();
+            this.repository = new GroomerRepository();
+            this.appointmentRepository = new AppointmentRepository();
         }
 
-        public GroomerController(GenericRepository<Groomer> repository)
+        public GroomerController(GroomerRepository repository)
         {
             this.repository = repository;
         }
 
+        // GET: Groomer/Calendar?date=date
+        [Authorize(Roles = "staff")]
+        public ActionResult Calendar(DateTime date)
+        {
+            string userId = User.Identity.GetUserId();
+            Groomer groomer =  repository.GetByUserId(userId);
+            List<Appointment> appointments = appointmentRepository.GetAppointmentsByGroomerByDate(groomer.GroomerID, date);
+            TimeSpan startTime = groomer.StartWorkTime.TimeOfDay;
+            TimeSpan endTime = groomer.EndWorkTime.TimeOfDay;
+
+            List<GroomerCalendarViewModel> calendar = CalendarService.GroomerAppointmentsCalendar(
+                appointments, startTime, endTime
+            );
+        
+            ViewBag.Date = date.ToString("dd-MM-yyyy");
+            ViewBag.groomerName = groomer.Name;
+            return View("Appointments", calendar);
+        }
+
         // GET: Groomer
+        [Authorize(Roles = "admin")]
         public ActionResult Index()
         {
             var groomers = repository.GetAll();
@@ -112,23 +123,26 @@ namespace PetGroomingApplication.Controllers
         {
             
             // send email to groomer with user & password
+            // ...........................           
            
-            // show authentivate data only for testing
+            // show authenticate data, only for demo
             ViewBag.Email = email;
             ViewBag.Pass = pass;
             return View("SuccessRegister");
         }
 
-         // GET: Groomer/Edit/5
+
+        // GET: Groomer/Edit/5
+        [Authorize(Roles = "staff, admin")]
         public ActionResult Edit(Guid id)
         {
-
             Groomer groomer = repository.GetById(id);
             return View("Edit", groomer);
         }
 
         // POST: Groomer/Edit/5
         [HttpPost]
+        [Authorize(Roles = "staff, admin")]
         public ActionResult Edit(Guid id, FormCollection collection)
         {
             Groomer groomer = new Groomer();
@@ -146,14 +160,16 @@ namespace PetGroomingApplication.Controllers
         }
 
         // GET: Groomer/Delete/5
+        [Authorize(Roles = "admin")]
         public ActionResult Delete(Guid id)
         {
             Groomer groomer = repository.GetById(id);
             return View("Delete", groomer);
         }
 
-        // POST: Groomer/Delete/5
+         // POST: Groomer/Delete/5
         [HttpPost]
+        [Authorize(Roles ="admin")]
         public ActionResult Delete(Guid id, FormCollection collection)
         {
             try

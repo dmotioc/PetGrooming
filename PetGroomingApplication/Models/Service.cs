@@ -21,10 +21,10 @@ namespace PetGroomingApplication.Models
         public string Name { get; set; }
 
         [Required]
-        [Display(Name = "Service duration(minutes)")]
+        [Display(Name = "Duration (minutes)")]
         public int DurationInMinutes {get; set; }
         
-        [Display(Name = "Service price (EUR)")]
+        [Display(Name = "Rate")]
         [DataType(DataType.Currency)]
         public decimal Rate { get; set; }
         public virtual ICollection<Appointment> Appointments { get; set; }

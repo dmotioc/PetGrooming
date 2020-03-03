@@ -18,13 +18,14 @@ namespace PetGroomingApplication.Controllers
         private GroomerRepository groomerRepository = null;
         private IGenericRepository<Service> serviceRepository = null;
         private IGenericRepository<Pet> petRepository = null;
-
+        private IGenericRepository<Owner> ownerRepository = null;
         public AppointmentController()
         {
             this.appointmentRepository = new AppointmentRepository();
             this.groomerRepository = new GroomerRepository();
             this.serviceRepository = new GenericRepository<Service>();
             this.petRepository = new GenericRepository<Pet>();
+            this.ownerRepository = new GenericRepository<Owner>();
         }
 
         // GET: Appointment
@@ -39,31 +40,10 @@ namespace PetGroomingApplication.Controllers
         public ActionResult Details(Guid id)
         {
             Appointment appointment = appointmentRepository.GetById(id);
-            return Content("Ok");
+             return View("Details", appointment);
         }
         
-        [HttpGet]
-        [Route("appointment/groomer")]
-        [Authorize(Roles = "staff")]
-        public ActionResult GroomerAppointments(DateTime date)
-        {
-            // List<Appointment> appointments = appointmentRepository.GetAppointmentsByGroomerByDate(id, date.Date);
-            string userId = User.Identity.GetUserId();
-            Guid groomerID = groomerRepository.GetIdByUserId(userId);
-            CalendarService calendar = new CalendarService();
-            List<CalendarViewModel> appointmentsCalendar = calendar.GetAppointmentsCallendarByGroomerByDate(groomerID, date.Date);
-            ViewBag.Date = date.Date;
-            ViewBag.groomerID = groomerID;
-            ViewBag.groomerName = groomerRepository.GetById(ViewBag.groomerID = groomerID).Name;
-            return View("GroomerAppointments", appointmentsCalendar);
-        }
-        
-        public ActionResult ListByCustomer(Guid id)
-        {
-            return View();
-        }
-
-        // GET: Appointment/Create
+         // GET: Appointment/Create
         public ActionResult Create()
         {
             return View();

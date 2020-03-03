@@ -1,0 +1,19 @@
+﻿@model PetGroomingApplication.Models.Appointment
+
+<div >
+    @{
+
+        if (Model.Service != null)
+        {
+            @Html.DisplayNameFor(model => model.Service.DurationInMinutes);
+            <text>: </text>
+            @Html.DisplayFor(model => model.Service.DurationInMinutes);
+            <text>, </text>
+
+
+
+            @Html.DisplayNameFor(model => model.Service.Rate);
+            <text>: </text>
+            @Html.DisplayFor(model => model.Service.Rate);
+        }}
+</div>

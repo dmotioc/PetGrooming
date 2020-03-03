@@ -1,0 +1,57 @@
+﻿<div style="width: 800px">
+    @{
+        if (ViewBag.calendar != null)
+        {
+        <p> &emsp;&emsp; &emsp;&emsp;Click below to choose appointment time</p>
+
+            <div class="lead"></div>
+            <table class="calendar">
+                @{
+                    bool displayHeader = true;
+                    foreach (var pair in ViewBag.calendar)
+                    {
+                        DateTime date = pair.Key;
+                        var calendarPerDay = pair.Value;
+                        if (displayHeader)
+                        {
+                            <tr>
+                                <th>Date</th>
+                                @foreach (var item in calendarPerDay)
+                                {
+                                    <th>
+                                        @{
+                                            var parameterValue = item.Time.ToString(@"hh\:mm");
+                                        }
+                                        @Html.DisplayFor(modelItem => parameterValue)
+                                    </th>
+                                }
+                            </tr>
+                            displayHeader = false;
+                        }
+                        <tr>
+                            <td class="date">@date.ToString("dd-MM-yyyy")</td>
+                            @foreach (var item in calendarPerDay)
+                            {
+
+                                DateTime dateTime = date + item.Time;
+                                string dataAttribute = (item.Status == PetGroomingApplication.Models.Status.Available
+                                        ? string.Format("data-date = '{0}' data-date-formated='{1}'", dateTime.ToString(), dateTime.ToString("dd-MM-yyyy HH:mm"))
+                                        : ""
+                                    ); ;
+                                string cls = item.Status.ToString() + (item.Status == PetGroomingApplication.Models.Status.Available ? " pointer" : "");
+                                <td class="@cls" @Html.Raw(dataAttribute)>
+                                    <text>@(item.Status == PetGroomingApplication.Models.Status.Booked ? "x" : "")</text>
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+            </table>
+
+            <div class="legend">
+                <div class="Available"></div> - Available &emsp;
+                <div class="Booked">x</div> - Not available
+            </div>
+        }
+    }
+</div>

@@ -1,0 +1,180 @@
+﻿@model IEnumerable<PetGroomingApplication.Models.GroomerCalendarViewModel>
+
+@{
+    ViewBag.Title = "Groomer Appointments";
+}
+
+<h2>Groomer Appointments</h2>
+
+<p>
+    @*@Html.ActionLink("Create New", "Create")*@
+</p>
+
+<h3>@ViewBag.groomerName</h3>
+
+@{
+    string date = ViewBag.Date;
+}
+Date
+<input id="date" value="@date" class="date-picker" />
+@*Html.TextBox("Date", date, null, new { @class = "date-picker form-control" })*@
+
+<div class="lead"></div>
+
+<div style="height: 70vh">
+    <div style='position:relative'>
+        <table class="calendar">
+
+            <tr>
+                @foreach (var item in Model)
+                {
+                    <th>
+                        @{
+                            var parameterValue = item.Time.ToString(@"hh\:mm");
+                        }
+                        @Html.DisplayFor(modelItem => parameterValue)
+                    </th>
+                }
+            </tr>
+            <tr>
+                @foreach (var item in Model)
+                {
+                    string startAppointmentClass = (item.IsAppointmentStart ? "app-start" : "");
+
+                    if (item.Status == PetGroomingApplication.Models.Status.Booked)
+                    {
+                        string dataAttribute = $"data-id = '{item.AppointmentID}'";
+                        <td class="@item.Status @startAppointmentClass pointer" @Html.Raw(dataAttribute)>
+                            <div class="detail-short">
+                                @foreach (string det in item.AppointmentShortDetails)
+                                {
+                                    <div>@det</div>
+                                }
+                            </div>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="@item.Status"></td>
+                    }
+                }
+            </tr>
+
+        </table>
+        @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="legend">
+        <div class="Booked"></div> - Appointment &emsp;
+        <div class="Available"></div> - Available
+    </div>
+    <div>
+        Click on appointment to see all details.
+    </div>
+</div>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+@*<script src="~/Scripts/jquery-3.4.1.min.js"></script>*@
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+
+<style>
+
+    table.calendar td {
+        width: 48px;
+        height: 100px;
+        padding: 0;
+        border: 1px solid grey;
+    }
+
+    table.calendar th {
+        padding: 5px 1px;
+        border-top: 0.5px solid lightgrey;
+    }
+
+    table.calendar td.app-start {
+        border-left: 3px solid grey !important;
+    } 
+    
+    .Available {
+        background: lightgrey;
+    }
+
+    .Booked {
+        background: orange;
+    }
+    .pointer {
+        cursor: pointer;
+    }
+
+    .spacer {
+       height: 80px; 
+    }
+    .detail-short {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid DarkSlateGrey;
+        color: DarkSlateGrey;
+        display: none;
+        width: 200px;
+        position: absolute;
+        z-index: 100;
+    }
+    
+    div.legend {
+        display: flex;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    div.legend div {
+        border: 1px solid #eee;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        margin-right: 10px;
+    }
+
+    input#date {
+        width: 90px;
+        padding: 5px;
+    }
+</style>
+
+
+<script>
+    $(function () {
+        $('.Booked').hover(
+            function () {
+                console.log("booked.hover");
+                var p = ($(this).position());
+                p.top = p.top + 115;
+                p.left = p.left - 50;
+                $(this).children('div').css(p).show();
+            },
+            function () {
+                console.log("booked.out");
+                $(this).children('div.detail-short').hide();
+            }
+        );
+        $('.Booked').click(function () {
+            const id = $(this).attr('data-id');
+            window.location.href = '/Appointment/Details/' + id;
+        });
+
+        $('.date-picker').datepicker({ dateFormat: 'dd-mm-yy' });
+
+        $('.date-picker').change(function () {
+            const date= formatDate($(this).val());
+            const thisUrl = '@Url.Action(null)';
+            window.location.href = thisUrl + '?date=' + date;
+        })
+    })
+
+    function formatDate(dateDMY) {
+    var d = dateDMY.split('-');
+    return [d[2], d[1], d[0]].join('-');
+}
+</script>
+

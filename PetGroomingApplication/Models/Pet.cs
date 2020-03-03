@@ -14,6 +14,10 @@ namespace PetGroomingApplication.Models
         public Guid PetID { get; set; }
 
         [Required]
+        [ForeignKey("Owner")]
+        public Guid OwnerID { get; set; }
+        
+        [Required]
         public string Name { get; set; }
 
         [Required]

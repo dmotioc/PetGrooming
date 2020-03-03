@@ -18,6 +18,15 @@ namespace PetGroomingApplication.Repository
             this.groomingContext = new GroomingContext();
 
         }
+        public Groomer GetByUserId(string userId)
+        {
+            this.groomingContext.Database.Log += s => Debug.WriteLine(s);
+            Groomer groomer = groomingContext.Groomers
+                .Where(g => g.UserId == userId)
+                .FirstOrDefault();
+            return groomer;
+        }
+
         public Guid GetIdByUserId(string userId)
         {
             this.groomingContext.Database.Log += s => Debug.WriteLine(s);
@@ -27,5 +36,15 @@ namespace PetGroomingApplication.Repository
                 .FirstOrDefault();
             return groomerID;
         }
+        public List<Groomer> GetBySpecialization(Species species)
+        {
+            this.groomingContext.Database.Log += s => Debug.WriteLine(s);
+            List<Groomer> groomers = groomingContext.Groomers
+                .Where(e => e.Specializing == species)
+                .ToList();
+            return groomers;
+        }
+
+
     }
 }

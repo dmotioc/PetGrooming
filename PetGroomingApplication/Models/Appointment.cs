@@ -15,20 +15,22 @@ namespace PetGroomingApplication.Models
         
         [Required]
         [ForeignKey("Service")]
+        [Display(Name = "Service")]
         public Guid ServiceID { get; set; }
 
         [Required]
+        [Display(Name = "Date and time")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy HH:mm}", ApplyFormatInEditMode = true)] 
         public DateTime DateTime { get; set; }
-
-        //[Required]
-        // public int DurationInMinutes { get; set; }
 
         [Required]
         [ForeignKey("Groomer")]
+        [Display(Name = "Groomer")]
         public Guid GroomerID { get; set; }
 
         [Required]
         [ForeignKey("Pet")]
+        [Display(Name = "Pet")] 
         public Guid PetID { get; set; }
         public virtual Service Service { get; set; }
         public virtual Groomer Groomer { get; set; }
