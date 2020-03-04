@@ -21,9 +21,11 @@ namespace PetGroomingApplication.Repository
         public List<Appointment> GetAppointmentsByGroomerByDate(Guid groomerID, DateTime date)
         {
             this.groomingContext.Database.Log += s => Debug.WriteLine(s);
+            date = date.Date;
             var appointments = groomingContext.Appointments
-                        .Where(e => e.GroomerID == groomerID)
-                        .Where(e => System.Data.Entity.DbFunctions.TruncateTime(e.DateTime) == date)
+                        .Where(e => e.GroomerID == groomerID )
+                        //         .Where(e => e.GroomerID == groomerID && Convert.ToDateTime(e.DateTime).Date === date)
+                                .Where(e => System.Data.Entity.DbFunctions.TruncateTime(e.DateTime) == date)
                         .OrderBy(e => e.DateTime)
                         .ToList();
             return appointments;

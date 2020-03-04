@@ -20,7 +20,7 @@ namespace PetGroomingApplication.Models
 
         [Required]
         [Display(Name = "Date and time")]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy HH:mm}", ApplyFormatInEditMode = true)] 
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)] 
         public DateTime DateTime { get; set; }
 
         [Required]

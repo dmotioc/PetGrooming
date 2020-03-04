@@ -163,7 +163,7 @@ Date
             window.location.href = '/Appointment/Details/' + id;
         });
 
-        $('.date-picker').datepicker({ dateFormat: 'dd-mm-yy' });
+        $('.date-picker').datepicker({ dateFormat: 'dd.mm.yy' });
 
         $('.date-picker').change(function () {
             const date= formatDate($(this).val());
@@ -173,8 +173,8 @@ Date
     })
 
     function formatDate(dateDMY) {
-    var d = dateDMY.split('-');
-    return [d[2], d[1], d[0]].join('-');
+    var d = dateDMY.split('.');
+    return [d[2], d[1], d[0]].join('.');
 }
 </script>
 

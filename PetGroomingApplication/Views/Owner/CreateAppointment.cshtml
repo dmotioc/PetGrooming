@@ -95,10 +95,9 @@
 
             $(document).on("click", ".Available", function () {
 
-                const formatedDate = $(this).attr('data-date-formated');
-                $('#DateTime').val(formatedDate);
-
                 const date = $(this).attr('data-date');
+                $('#DateTime').val(date);
+
                 var groomerID = $('#@Html.IdFor(m=>m.GroomerID)').val();
                 var serviceID = $('#@Html.IdFor(m=>m.ServiceID)').val();
                 var modelData = {

@@ -10,8 +10,7 @@ namespace PetGroomingApplication.Services
 
     public static class CalendarService
     {
-        private static TimeSpan timeStep = TimeSpan.FromMinutes(30);
-
+        private readonly static TimeSpan timeStep = TimeSpan.FromMinutes(30);
 
         public static DateTime[] DateRange(DateTime dateStart, int dayCount) { 
             return Enumerable.Range(0, dayCount)

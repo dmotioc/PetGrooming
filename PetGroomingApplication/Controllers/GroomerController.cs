@@ -55,7 +55,7 @@ namespace PetGroomingApplication.Controllers
                 appointments, startTime, endTime
             );
         
-            ViewBag.Date = date.ToString("dd-MM-yyyy");
+            ViewBag.Date = date.ToString("dd.MM.yyyy");
             ViewBag.groomerName = groomer.Name;
             return View("Appointments", calendar);
         }
