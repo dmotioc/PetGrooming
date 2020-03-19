@@ -1,3 +1,20 @@
 ﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var controller = HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"].ToString().ToLower();
+    string cLayout = "";
+    switch (controller)
+    {
+        
+        case "home":
+            cLayout = "~/Views/Shared/_HomeLayout.cshtml";
+            break;
+        
+        default:
+            cLayout = "~/Views/Shared/_Layout.cshtml";
+            break;
+    }
+    Layout = cLayout;
 }
+
+@*Layout = "~/Views/Shared/_Layout.cshtml";*@
+

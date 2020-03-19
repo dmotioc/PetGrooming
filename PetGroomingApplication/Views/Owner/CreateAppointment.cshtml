@@ -1,75 +1,79 @@
 ﻿@model PetGroomingApplication.Models.Appointment
-
 @{
     ViewBag.Title = "Create Appointment";
+    ViewBag.targetMenu = "create-appointment";
 }
 
-<h2>Create Appointment</h2>
-<div class="form-horizontal">
-    <hr />
 
-    @using (Html.BeginForm("CreateAppointment", "Owner"))
-    {
+<hr />
+<h4>Create Appointment</h4>
+@using (Html.BeginForm("CreateAppointment", "Owner", FormMethod.Post, new { role = "form" }))
+{
 
-        @Html.AntiForgeryToken()
+    @Html.AntiForgeryToken()
 
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    
+ 
+<div style="width:70%">
+    
+    <div id="form-validation-error" class="bg-warning text-danger hidden" style="padding:10px;"></div>
+   
+    <div class="row text-right">
+        <a href="/Pet/Create" class="btn btn-default btn-sm  navbar-btn pull-right align-top"> Add a pet </a>
+    </div>
 
-        <a href="/Pet/Create"> Add a pet </a>
-
-        <div class="form-group">
-            @Html.Label("PetID", "Select a pet", htmlAttributes: new { @class = "control-label col-md-2" })
-            @{
-                var list = ViewData["myPets"] as IEnumerable<SelectListItem>;
-                if (list.Count() == 0)
-                {
-                    <p>You haven't add any pet yet. </p>
-                }
-                else
-                {
-                    <div class="col-md-10">
-                        @Html.DropDownListFor(model => model.PetID, list, "Please select the pet", new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.PetID, "", new { @class = "text-danger" })
-                    </div>
-                }
+    <div class="row padding-5">
+        @Html.Label("PetID", "Select a pet", htmlAttributes: new { @class = "control-label col-md-2" })
+        @{
+            var list = ViewData["myPets"] as IEnumerable<SelectListItem>;
+            if (list.Count() == 0)
+            {
+                <p>You haven't add any pet yet. </p>
             }
-
-
-
-        </div>
-
-        <div id="divGroomersAndServices">
-            @Html.Partial("GetGroomersAndServicesPartial")
-        </div>
-
-        <div class="form-group">
-            @{
-                string varDate = (Model.DateTime == DateTime.MinValue ? "" : Model.DateTime.ToString());
+            else
+            {
+                <div class="col-md-5">
+                    @Html.DropDownListFor(model => model.PetID, list, "Please select the pet", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PetID, "", new { @class = "text-danger" })
+                </div>
             }
-            @Html.LabelFor(model => model.DateTime, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBox("DateTime", (Model.DateTime > DateTime.MinValue ? Model.DateTime.ToString() : ""), new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DateTime, "", new { @class = "text-danger" })
-                <span class="text-danger" id="not-available">
+        }
+    </div>
 
-                </span>
-            </div>
+    <div id="divGroomersAndServices">
+        @Html.Partial("GetGroomersAndServicesPartial")
+    </div>
 
+    <div class="row padding-5">
+        @{
+            string varDate = (Model.DateTime == DateTime.MinValue ? "" : Model.DateTime.Date.ToString());
+            string varTime = (Model.DateTime == DateTime.MinValue ? "" : Model.DateTime.TimeOfDay.ToString());
+        }
+        <label class="control-label col-md-2">Date</label>
+        <div class="col-md-2">
+            @Html.TextBox("Date", varDate, new { @class = "form-control date-control" })
         </div>
-
-        <div class="lead"></div>
-
-        <div id="divGroomersAvailability">
-            @Html.Partial("GetGroomerCalendarPartial")
+        <label class="control-label col-md-1">Time</label>
+        <div class="col-md-2">
+            @Html.TextBox("Time", varTime, new { @class = "form-control time-control" })
         </div>
+        <span class='calendar-icon  @(Model.GroomerID == Guid.Empty ? "hidden" : "show")'>
+            <i class="fa fa-calendar"></i>
+        </span>
+    </div>
+    <div id="divGroomerCalendar" class="hidden">
+        @Html.Partial("GetGroomerCalendarPartial")
+    </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value=" &emsp;Submit appointment &emsp;" class="btn btn-default" />
-            </div>
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+            <input type="button" id="submit" value=" Book appointment " class="btn btn-primary text-uppercase" />
         </div>
-    }
+    </div>
 </div>
+}
+
 
 
 @section Scripts {
@@ -90,18 +94,55 @@
             $(document).on("change", "#GroomerID", function () {
                 let id = $(this).val();
                 var data = { 'id': id };
-                $("#divGroomersAvailability").load('/Owner/GroomerCalendar', data);
+                $("#divGroomerCalendar").load('/Owner/GroomerCalendar', data).removeClass("hidden").addClass("show", 1000);
+                $(".calendar-icon").removeClass("hidden").addClass("show");
              });
 
-            $(document).on("click", ".Available", function () {
 
-                const date = $(this).attr('data-date');
-                $('#DateTime').val(date);
-
+            $(document).on("click", "#submit", function () {
+                const dateTime = $('#Date').val() + " " + $('#Time').val();
+                var petID = $('#@Html.IdFor(m=>m.PetID)').val();
                 var groomerID = $('#@Html.IdFor(m=>m.GroomerID)').val();
                 var serviceID = $('#@Html.IdFor(m=>m.ServiceID)').val();
                 var modelData = {
-                    "DateTime": date,
+                    "PetID": petID,
+                    "GroomerID": groomerID,
+                    "ServiceID": serviceID,
+                    "DateTime": dateTime,
+                };
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    url: '/Owner/CreateAppointment',
+                    data: modelData,
+                    dataType: 'text',
+                    success: function (data, textStatus, jqXHR) {
+                        if (data.indexOf("OK") < 0) {
+                            console.log(data);
+                            $("#form-validation-error").html(data).removeClass("hidden").addClass("show");
+                        } else {
+                            window.location.href="/Owner/AppointmentRegisterSuccess"
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) { }
+                });
+
+            });
+
+            $(document).on("click", ".calendar-icon", function () {
+                $("#divGroomerCalendar").removeClass("hidden").addClass("show");
+            });
+
+            $(document).on("click", ".Available", function () {
+                const dateTime = $(this).attr('data-date');
+                const dateTimeArray = dateTime.split(" ");
+                $('#Date').hide().val(dateTimeArray[0]).fadeIn("fast");
+                $('#Time').hide().val(dateTimeArray[1]).fadeIn("fast");
+                $("#divGroomerCalendar").removeClass("show").addClass("hidden", 500);
+                var groomerID = $('#@Html.IdFor(m=>m.GroomerID)').val();
+                var serviceID = $('#@Html.IdFor(m=>m.ServiceID)').val();
+                var modelData = {
+                    "DateTime": dateTime,
                     "GroomerID": groomerID,
                     "ServiceID": serviceID
                 };
@@ -113,16 +154,14 @@
                     dataType: 'text',
                     success: function (data, textStatus, jqXHR) {
                         if (data == 'false') {
-                            $("#not-available").html("There is not enough available time for this service at this time!");
+                            $("#form-validation-error").html("There is not enough available time for this service at this time!").removeClass("hidden").addClass("show");
                         } else {
-                            $("#not-available").html("");
+                            $("#form-validation-error").html("").removeClass("show").addClass("hidden");
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) { }
                 });
             });
-
-
          });
 
     </script>
@@ -130,18 +169,20 @@
 
 <style>
 
+
+
     table.calendar td {
         width: 40px;
         height: 25px;
         border: 1px solid #ddd;
         text-align: center;
         /*padding-top: 12px;
-        padding-bottom: 12px;*/
+                    padding-bottom: 12px;*/
     }
 
-    table.calendar td.date {
-        width: 10rem;
-    }
+        table.calendar td.date {
+            width: 8.5rem;
+        }
 
     table.calendar th {
         text-align: center;
@@ -156,6 +197,11 @@
         cursor: pointer;
     }
 
+    .calendar-icon {
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
     .Booked {
         background: #ddd;
         color: #999;
@@ -167,12 +213,23 @@
         margin-bottom: 20px;
     }
 
-    div.legend div {
-        border: 1px solid #eee;
-        width: 20px;
-        height: 20px;
-        text-align: center;
-        margin-right: 10px;
+        div.legend div {
+            border: 1px solid #eee;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            margin-right: 10px;
+        }
+
+    .p-2 {
+        padding: 10px;
+    }
+
+    #divGroomerCalendar {
+        -webkit-transition: all 0.8s ease;
+        -moz-transition: all 0.8s ease;
+        -o-transition: all 0.8s ease;
+        transition: all 1.5s ease;
     }
 </style>
 

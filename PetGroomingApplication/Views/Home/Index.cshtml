@@ -1,55 +1,578 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-<div style="width:150px; float:right;"
-    <h3>Demo users:</h3>
-    <dl class="demo">
-        <dt>Clienti:</dt>
-        <dd>user1 </dd>
-        <dd>user2 </dd>
-        <dt>Groomeri:</dt>
-        <dd>Paul </dd>
-        <dd>Andra </dd>
-        <dd>Alina </dd>
-        <dt>Admin:</dt>
-        <dd>Boss00 </dd>
-<dt>Parola unica:</dt>
-        <dd>Cocofifi)0</dd>
-    </dl>
+<!--home Section -->
+<section id="home" class="home">
+    <div class="overlay">
+        <div class="home_skew_border">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 ">
+                        <div class="main_home_slider text-center">
+                            <div class="single_home_slider">
+                                <div class="main_home wow fadeInUp" data-wow-duration="700ms">
+                                    <h1>Welcome to Pet Spa</h1>
+                                    <h3>Our Clients Are Our First Priority</h3>
+                                    <div class="separator"></div>
+                                    <p>
+                                        The Pet Spa is a grooming salon designed to pamper your pet from nose to tail. With 15 years combined industry experience, you can be sure your fur baby is in good hands.
+                                    </p>
 
-</div>
-<style>
-    .demo {
-        margin: 5px;
-    }
-    .demo  dd {
-        margin-left: 20px;
-    }
-</style>
-<div class="jumbotron">
-    <h1>HOME PAGE</h1>
-    <p class="lead"></p>
-   
+                                    <p>Create and find all your appointments within a few clicks.</p>
+                                    <div class="center-block">
+                                        @Html.ActionLink("BOOK APPOINTMENT", "CreateAppointment", "Owner", null, new { @class = "btn main_home_button" })
+
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="single_home_slider">
+                                    <div class="main_home wow fadeInUp" data-wow-duration="700ms">
+                                        <h3>Our Clients Are Our First Priority</h3>
+                                        <h1>WELCOME TO BINO</h1>
+                                        <div class="separator"></div>
+                                        <p>
+                                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+                                            standard dummy text ever since the 1500s, when an unknown printer took a galley
+                                            of type and scrambled it to make a type specimen book.
+                                        </p>
+                                        <div class="home_btn">
+                                            <a href="" class="btn btn-lg m_t_10">GET STARTED NOW</a>
+                                            <a href="" class="btn btn-default">LEARN MORE</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="single_home_slider">
+                                    <div class="main_home wow fadeInUp" data-wow-duration="700ms">
+                                        <h3>Our Clients Are Our First Priority</h3>
+                                        <h1>WELCOME TO BINO</h1>
+                                        <div class="separator"></div>
+                                        <p>
+                                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+                                            standard dummy text ever since the 1500s, when an unknown printer took a galley
+                                            of type and scrambled it to make a type specimen book.
+                                        </p>
+                                        <div class="home_btn">
+                                            <a href="" class="btn btn-lg m_t_10">GET STARTED NOW</a>
+                                            <a href="" class="btn btn-default">LEARN MORE</a>
+                                        </div>
+
+                                    </div>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="scrooldown">
+                <a href="#feature"><i class="fa fa-arrow-down"></i></a>
+            </div>
+        </div>
+    </div>
+</section><!--End of home section -->
+<!--feature section -->
+<section id="feature" class="feature sections">
+    <div class="container">
+        <div class="row">
+            <div class="main_feature text-center">
+
+                <div class="col-sm-3">
+                    <div class="single_feature">
+                        <div class="single_feature_icon">
+                            <i class="fa  fa-comments-o"></i>
+                        </div>
+
+                        <h4>PERSONALIZATION</h4>
+                        <div class="separator3"></div>
+                        <p>
+                            The Pet Spa is a grooming salon designed to pamper your pet from nose to tail. One on one consultations with your groomer are offered to discuss and design your dog or cat’s perfect haircut and experience.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="single_feature">
+                        <div class="single_feature_icon">
+                            <i class="fa fa-heart-o"></i>
+                        </div>
+
+                        <h4>BEST PRODUCTS</h4>
+                        <div class="separator3"></div>
+                        <p>
+                            Only the highest quality shampoos and conditioners are stocked and hand-picked for your pet’s specific coat and skin type.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="single_feature">
+                        <div class="single_feature_icon">
+                            <i class="fa fa-diamond"></i>
+                        </div>
+                        <h4>QUALITY</h4>
+                        <div class="separator3"></div>
+                        <p>
+                            With 15 years combined industry experience, we strive to provide our customers with the most current grooming trends and products through continuing education, attending seminars, expos,  grooming competitions.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="single_feature">
+                        <div class="single_feature_icon">
+                            <i class="fa fa-graduation-cap "></i>
+                        </div>
+
+                        <h4>Professionalism</h4>
+                        <div class="separator3"></div>
+                        <p>
+
+
+                            All employees are certified groomers with pet first aid training. You can be sure your fur baby is in good hands.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div><!--End of container -->
+</section><!--End of feature Section -->
+<!-- service Section -->
+<section id="service" class="service">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="main_service">
+                <div class="col-md-6 col-sm-12 no-padding">
+
+                    <div class="single_service single_service_text text-right">
+                        <div class="head_title">
+                            <h2 class="left">DOGS SERVICES</h2>
+                        </div>
+
+                        <div class="row left">
+                            <div class="col-md-12 col-sm-10 col-xs-10 margin-bottom-60">
+                                <div class="row">
+
+                                    <div class="col-sm-10 col-sm-offset-1 col-xs-9 col-xs-offset-1">
+                                        <article class="single_service_right_text">
+                                            <h4>Full Grooming Service</h4>
+                                            <p>
+                                                A bath with towel and hair drying, teeth brushing, nail trimming, eye and ear cleaning, a brush out, and a haircut based upon your dog’s breed standard or your individual style choice.
+                                            </p>
+                                        </article>
+                                    </div>
+                                    <div class="col-sm-1 col-xs-1">
+                                        <figure class="single_service_icon">
+                                            <i class="fa fa-heart"></i>
+                                        </figure><!-- End of figure -->
+                                    </div>
+                                </div>
+                            </div><!-- End of col-sm-12 -->
+
+                            <div class="col-md-12 col-sm-10 col-xs-10 margin-bottom-60">
+                                <div class="row">
+
+                                    <div class="col-sm-10 col-sm-offset-1 col-xs-9 col-xs-offset-1">
+                                        <article class="single_service_right_text">
+                                            <h4>Bath Grooming</h4>
+                                            <p>
+                                                A bath, trimmed nails, and cleaned ears.
+                                            </p>
+                                        </article>
+                                    </div>
+                                    <div class="col-sm-1 col-xs-1">
+                                        <figure class="single_service_icon">
+                                            <i class="fa fa-heart"></i>
+                                        </figure><!-- End of figure -->
+                                    </div>
+                                </div>
+                            </div><!-- End of col-sm-12 -->
+
+                            <div class="col-md-12 col-sm-10 col-xs-10 margin-bottom-60">
+                                <div class="row">
+
+                                    <div class="col-sm-10 col-sm-offset-1 col-xs-9 col-xs-offset-1 margin-bottom-20">
+                                        <article class="single_service_right_text">
+                                            <h4>De-matting</h4>
+                                            <p>
+                                                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                                Lorem Ip sum has been the industry's standard dummy text ever.
+                                            </p>
+                                        </article>
+                                    </div>
+                                    <div class="col-sm-1 col-xs-1">
+                                        <figure class="single_service_icon">
+                                            <i class="fa fa-heart"></i>
+                                        </figure><!-- End of figure -->
+                                    </div>
+                                </div>
+                            </div><!-- End of col-sm-12 -->
+
+                        </div>
+                    </div>
+                </div><!-- End of col-sm-6 -->
+
+                <div class="col-md-6 col-sm-12 no-padding">
+                    <div style="display:flex; background-color:lightgrey; justify-content:center; align-items:center;">
+                        <figure class="single_service single_service_img">
+                            <div class="overlay-img"></div>
+                            <img src="/Content/images/dog_grooming.jpg" style-="width:60%" alt="" />
+                        </figure><!-- End of figure -->
+                    </div><!-- End of col-sm-6 -->
+                </div>
+            </div>
+        </div><!-- End of row -->
+
+        <div class="row">
+            <div class="main_service">
+                <div class="col-md-6 col-sm-12 no-padding">
+                    <div style="display:flex; background-color:lightgrey; justify-content:center; align-items:center;">
+                        <figure class="single_service single_service_img">
+                            <div class="overlay-img"></div>
+                            <img src="/Content/images/cat_grooming1.jpg" style-="width:60%" alt="" />
+                        </figure><!-- End of figure -->
+                    </div>
+                </div><!-- End of col-sm-6 -->
+
+                <div class="col-md-6 col-sm-12 no-padding">
+
+                    <div class="single_service single_service_text text-left">
+                        <div class="head_title">
+                            <h2 class="right">CAT SERVICES</h2>
+                        </div>
+
+                        <div class="row right">
+                            <div class="col-md-12 col-sm-10 col-xs-10 margin-bottom-60">
+                                <div class="row">
+
+                                    <div class="col-sm-1 col-xs-1">
+                                        <figure class="single_service_icon">
+                                            <i class="fa fa-heart"></i>
+                                        </figure><!-- End of figure -->
+                                    </div>
+                                    <div class="col-sm-10 col-sm-offset-1 col-xs-9 col-xs-offset-1">
+                                        <article class="single_service_right_text">
+                                            <h4>Full Grooming Service</h4>
+                                            <p>
+                                                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                                Lorem Ip sum has been the industry's standard dummy text ever.
+                                            </p>
+                                        </article>
+                                    </div>
+                                </div>
+                            </div><!-- End of col-sm-12 -->
+
+                            <div class="col-md-12 col-sm-10 col-xs-10 margin-bottom-60">
+                                <div class="row">
+
+                                    <div class="col-sm-1 col-xs-1">
+                                        <figure class="single_service_icon">
+                                            <i class="fa fa-heart"></i>
+                                        </figure><!-- End of figure -->
+                                    </div>
+                                    <div class="col-sm-10 col-sm-offset-1 col-xs-9 col-xs-offset-1">
+                                        <article class="single_service_right_text">
+                                            <h4>Bath Grooming</h4>
+                                            <p>
+                                                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                                Lorem Ip sum has been the industry's standard dummy text ever.
+                                            </p>
+                                        </article>
+                                    </div>
+                                </div>
+                            </div><!-- End of col-sm-12 -->
+
+                            <div class="col-md-12 col-sm-10 col-xs-10 margin-bottom-60">
+                                <div class="row">
+                                    <div class="col-sm-1 col-xs-1">
+                                        <figure class="single_service_icon">
+                                            <i class="fa fa-heart"></i>
+                                        </figure><!-- End of figure -->
+                                    </div>
+
+                                    <div class="col-sm-10 col-sm-offset-1 col-xs-9 col-xs-offset-1 margin-bottom-20">
+                                        <article class="single_service_right_text">
+                                            <h4>De-matting</h4>
+                                            <p>
+                                                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                                Lorem Ip sum has been the industry's standard dummy text ever.
+                                            </p>
+                                        </article>
+                                    </div>
+                                </div>
+                            </div><!-- End of col-sm-12 -->
+
+                        </div>
+                    </div>
+                </div><!-- End of col-sm-6 -->
+
+
+            </div>
+        </div><!-- End of row -->
+
+    </div><!-- End of Container-fluid -->
+</section><!-- End of service Section -->
+<!-- Team Section -->
+<section id="team" class="team">
+    <div class="main_team_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="head_title textwhite text-center margin-top-80">
+                        <h2>OUR TEAM</h2>
+                        <h3 class="subtitle">
+                            Meet our groomers. Let your fur baby in their experienced hands.
+                        </h3>
+                        <div class="separator"></div>
+                    </div><!-- End off Head_title -->
+
+                    <div class="main_team">
+                        <ul>
+                            <li>
+                                <div class="single_team_img">
+                                    <img src="/Content/images/groomers/Paul.jpg" alt="" />
+                                </div>
+                                <div class="single_team_text">
+                                    <h4>Paul</h4>
+                                    <p>Dog groomer</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="single_team_img">
+                                    <img src="/Content/images/groomers/Alina.jpg" alt="" />
+                                </div>
+                                <div class="single_team_text">
+                                    <h4>Alina</h4>
+                                    <p>Dog groomer</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="single_team_img">
+                                    <img src="/Content/images/groomers/Laura.jpg" alt="" />
+                                </div>
+                                <div class="single_team_text">
+                                    <h4>Laura</h4>
+                                    <p>Cat groomer</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="single_team_img">
+                                    <img src="/Content/images/groomers/Dana.jpg" alt="" />
+                                </div>
+                                <div class="single_team_text">
+                                    <h4>Dana</h4>
+                                    <p>Dog groomer</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="single_team_img">
+                                    <img src="/Content/images/groomers/Teo.jpg" alt="" />
+                                </div>
+                                <div class="single_team_text">
+                                    <h4>Teo</h4>
+                                    <p>Cat groomer</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div><!-- End of main team contant -->
+            </div>
+        </div><!-- End of container -->
+    </div>
+</section><!-- End off Team Section -->
+
+
+<section id="portofolio" class="portfolio sections">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="main_portfolio">
+                <div class="col-sm-12">
+                    <div class="head_title text-center" style="margin-bottom:40px;">
+                        <h2>PHOTO GALERY</h2>
+                        <div class="separator"></div>
+                    </div>
+                </div>
+                <div class="work_menu text-center">
+                    <div id="filters" class="toolbar mb2 mt2">
+                        <button class="btn-md fil-cat filter active" data-filter="all">ALL</button>/
+                        <button class="btn-md fil-cat filter" data-rel="web" data-filter=".dog">DOGS</button>/
+                        <button class="btn-md fil-cat filter" data-rel="design" data-filter=".cat">CATS</button>/
+                    </div>
+
+                </div>
+
+                <div style="clear:both;"></div>
+                <div id="portfoliowork">
+
+                    @{
+                        foreach (var pair in ViewBag.gallery)
+                        {
+                            string category = pair.Key.ToLower();
+                            foreach (string imgFile in pair.Value)
+                            {
+                                string petName = Path.GetFileNameWithoutExtension(imgFile);
+                                <div class="single_portfolio tile scale-anm web grid-item-width2 @category">
+                                    <img src="~/Content/images/gallery/@category/@imgFile" alt="" />
+                                    <a href="~/Content/images/gallery/@category/@imgFile" class="portfolio-img">
+                                        <div class="grid_item_overlay">
+                                            <div class="separator4"></div>
+                                            <h3>@petName</h3>
+                                            <!-- <p>@category</p>-->
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                        }
+                    }
+
+                </div>
+
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+    </div><!-- End off container -->
+</section> <!-- End off Work Section -->
+
+<section id="contact" class="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="contact_content sections">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="main_contact_info">
+                                <div class="contact_info_content padding-top-40 p_l_r"  style="min-height: 640px;">
+                                    <div class="col-sm-12">
+                                        <div class="single_contact_info padding-top-20">
+                                            <h4>Contact info</h4>
+
+                                        </div>
+                                        <div class="single_contact_info">
+                                            Address:
+                                            <address>
+                                                Fabrica de pensule, Cluj
+                                                Romania
+                                            </address>
+                                        </div>
+                                        <div class="single_contact_info">
+                                            Telephone:
+                                            <address>
+                                                <abbr title="Phone"> 0264 xxx xxx</abbr><br>
+                                                <abbr title="Phone"> 0740 xxx xxx</abbr>
+                                            </address>
+                                        </div>
+                                         <div class="single_contact_info">
+                                            Email:
+                                            <div>
+                                                <address>contact@petspa.ro</address>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="padding-10;">
+                                        <div id="map-canvas" style="height:280px; width: 100%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="single_contant_left padding-top-40 padding-bottom-90" style="min-height: 640px;">
+                                @Html.Partial("ContactPartial")
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!-- End of contact section -->
+
+<section id="trial" class="trial text-center wow fadeIn" data-wow-duration="2s" data-wow-dealy="1.5s">
+    <div class="main_trial_area">
+        <div class="video_overlay sections" style="height:400px;">
+
+        </div>
+    </div>
+</section><!-- End of Trial section -->
+<!--Footer section-->
+<section class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="main_footer">
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                        </div>
+
+                        <div class="col-sm-6 col-xs-12">
+                             <div class="flowus">
+                                 <p class=" wow fadeInRight text-right" data-wow-duration="4s" style="color:#fff;font-size:1.5em;">
+                                     Made with 
+                                     <i class="fa fa-heart" style="color:indianred"></i> 
+                                     by Dana Motioc
+                                     <a href="https://github.com/dmotioc/PetGrooming" target="_blank">
+                                         <i class="fa fa-github" style="font-size:2em;"></i>
+                                     </a>
+                                     &emsp;
+                                 </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!-- End off footer Section-->
+<!-- START SCROLL TO TOP  -->
+
+<div class="scrollup">
+    <a href="#"><i class="fa fa-chevron-up"  style="font-size:2rem;"></i></a>
 </div>
 
-@*<div clas7s="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>*@
+
+@section Scripts {
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYrQmkQIKN4prgzv3oBmtW2-DDAG-Cn_M&amp"></script>
+    <script>
+        $(function () {
+            $(document).on("click", "#submit", function () {
+                const modelData = $("form").serialize();
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    url: '/Home/Contact',
+                    data: modelData,
+                    dataType: 'json',
+                    success: function (data, textStatus, jqXHR) {
+                        if (data["error-message"]) {
+                            $("#error-message").html(data["error-message"]);
+                        } else if (data["success-message"]) {
+                            $("#success-message").html(data["success-message"]);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) { }
+                });
+            });
+
+        });
+
+        function initialize() {
+
+            var myLatlng = new google.maps.LatLng(46.782885, 23.607743);
+            var mapOptions = {
+                center: myLatlng,
+                zoom: 15,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+                title: 'The Informal School of IT '
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+
+}

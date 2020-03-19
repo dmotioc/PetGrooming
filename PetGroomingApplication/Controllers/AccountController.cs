@@ -91,7 +91,11 @@ namespace PetGroomingApplication.Controllers
                         {
                             returnUrl = "/Groomer/Calendar?date=" + DateTime.Today.ToString("yyyy-MM-dd");
                         }
- 
+                        else if (roles.Contains("admin"))
+                        {
+                            returnUrl = "/Admin/Index";
+                        }
+
                     }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:

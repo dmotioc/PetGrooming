@@ -2,50 +2,60 @@
 
 @{
     ViewBag.Title = "Services";
+    ViewBag.targetMenu = "services";
 }
 
-    <h2>Provided Services</h2>
+    <div class="col-md-8">
+        <h2>Services</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <td>
-            @Html.DisplayNameFor(model => model.Species)
-        </td>
-        <th>
-            @Html.DisplayNameFor(model => model.DurationInMinutes)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Rate)
-        </th>
-        <th></th>
-    </tr>
+         <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <td>
+                    @Html.DisplayNameFor(model => model.Species)
+                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.DurationInMinutes)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rate)
+                </th>
+                <th></th>
+            </tr>
 
-@foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Name)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Species)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.DurationInMinutes)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Rate)
-    </td>
-    <td>
-        @Html.ActionLink("Edit", "Edit", new { id = item.ServiceID }) |
-        @*@Html.ActionLink("Details", "Details", new { id=item.ServiceID }) |*@
-        @Html.ActionLink("Delete", "Delete", new { id = item.ServiceID })
-    </td>
-</tr>
-}
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Species)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DurationInMinutes)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rate)
+                    </td>
+                    <td class="text-right">
+                        <a href="/Service/Edit?id=@item.ServiceID" class="btn-row edit">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                            <span>Edit</span>
+                        </a>
+                        <a href="/Service/Delete?id=@item.ServiceID" class="btn-row delete">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            <span>Delete</span>
+                        </a>
+                        @*@Html.ActionLink("Details", "Details", new { id=item.ServiceID }) |*@
+                    </td>
+                </tr>
+            }
 
-</table>
+        </table>
+</div>
+<div class="col-md-12">
+    @Html.ActionLink("New Service", "Create", "Service", null, new { @class = "btn btn-primary text-uppercase" })
+</div>

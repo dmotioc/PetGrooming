@@ -9,11 +9,14 @@ namespace PetGroomingApplication.Models
 {
     public class Service
     {
+        private decimal _rate;
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
         public Guid ServiceID { get; set; }
         
         [Required]
+        [Range(1, 1000, ErrorMessage = "Please select the species")]
         public Species Species { get; set; }
         
         [Required]
@@ -25,8 +28,13 @@ namespace PetGroomingApplication.Models
         public int DurationInMinutes {get; set; }
         
         [Display(Name = "Rate")]
+
         [DataType(DataType.Currency)]
-        public decimal Rate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public decimal Rate {
+            get { return _rate; }
+            set { _rate = value; }
+        }
         public virtual ICollection<Appointment> Appointments { get; set; }
  
     }

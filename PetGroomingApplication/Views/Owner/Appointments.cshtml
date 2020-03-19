@@ -1,0 +1,67 @@
+﻿@model IEnumerable<PetGroomingApplication.Models.Appointment>
+
+@{
+    ViewBag.Title = "Appointments";
+    ViewBag.targetMenu = "appointments";
+}
+
+
+<div class="col-md-6 padding-10">
+    <h4>My Appointments</h4>
+</div>
+    <div class="col-md-2">
+        <a href="/Owner/CreateAppointment" class="btn btn-default btn-sm text-uppercase">Add new appointment</a>
+    </div>
+
+    <div class="col-md-8">
+
+        <table class="table">
+            <tr>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Time
+                </th>
+                <th>
+                    Pet name
+                </th>
+                <th>
+                    Service
+                </th>
+                <th>
+                    Groomer
+                </th>
+                <th></th>
+            </tr>
+
+            @{
+                foreach (var item in Model)
+                {
+
+                    string date = item.DateTime.ToString("dd.MM.yyyy");
+                    string time = item.DateTime.ToString("HH:mm");
+
+                    <tr>
+                        <td>
+                            @date
+                        </td>
+                        <td class="text-primary">
+                            @time
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Pet.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Service.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Groomer.Name)
+                        </td>
+                    </tr>
+                }
+            }
+
+        </table>
+    </div>
+</div>

@@ -15,9 +15,9 @@ namespace PetGroomingApplication.DAL
         {
             var groomers = new List<Groomer>
             {
-                new Groomer {  GroomerID = new Guid("92c665ad-a54d-ea11-bf15-083e8eba6e02"), Name = "Paul", StartWorkTime = DateTime.Parse("2005-09-01 08:00"), EndWorkTime = DateTime.Parse("2005-09-01 16:00"), Specializing = Species.Dog },
-                new Groomer {  GroomerID = new Guid("93c665ad-a54d-ea11-bf15-083e8eba6e02"), Name = "Andra", StartWorkTime = DateTime.Parse("2005-09-01 09:00"), EndWorkTime = DateTime.Parse("2005-09-01 17:00"), Specializing = Species.Dog },
-                new Groomer {  GroomerID = new Guid("94c665ad-a54d-ea11-bf15-083e8eba6e02"), Name = "Alina", StartWorkTime = DateTime.Parse("2005-09-01 14:00"), EndWorkTime = DateTime.Parse("2005-09-01 22:00"), Specializing = Species.Dog }
+                new Groomer {  GroomerID = new Guid("92c665ad-a54d-ea11-bf15-083e8eba6e02"), Name = "Paul", StartWorkingTime = DateTime.Parse("2005-09-01 08:00"), EndWorkingTime = DateTime.Parse("2005-09-01 16:00"), Specializing = Species.Dog },
+                new Groomer {  GroomerID = new Guid("93c665ad-a54d-ea11-bf15-083e8eba6e02"), Name = "Andra", StartWorkingTime = DateTime.Parse("2005-09-01 09:00"), EndWorkingTime = DateTime.Parse("2005-09-01 17:00"), Specializing = Species.Dog },
+                new Groomer {  GroomerID = new Guid("94c665ad-a54d-ea11-bf15-083e8eba6e02"), Name = "Alina", StartWorkingTime = DateTime.Parse("2005-09-01 14:00"), EndWorkingTime = DateTime.Parse("2005-09-01 22:00"), Specializing = Species.Dog }
          };
             groomers.ForEach(g => context.Groomers.Add(g));
             context.SaveChanges();

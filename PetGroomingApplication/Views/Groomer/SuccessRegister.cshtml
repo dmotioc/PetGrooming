@@ -1,58 +1,33 @@
 ﻿@{
     ViewBag.Title = "Success Register";
+    ViewBag.targetMenu = "groomers";
 }
 
-<h3>Groomer Register</h3>
+<div class="col-md-8 col-md-offset-2">
+    
+    <div style="height: 10vh;"></div>
+    
+    <div class="panel panel-success" style="height:50vh;">
+        <div class="panel-heading">Success !</div>
+        <div class="panel-body text-center">
+            <p>
 
-<div>
-    <hr />
-    <p>
-        
-            The groomer account was successfuly created.
-            An email with authenthicated credentials was sent to the groomer.
-       
-    </p>
-</div>
-<div class="spacer"></div>
+                The groomer account was successfuly created.<br />
+                The authenthicated credentials was sent to the groomer by email.
 
- <h5> Email content (for demo only)</h5>
- <div class="email-content">
+            </p>
+            <div class="text-warning">@ViewBag.EmailResult</div>
+            @*<div class="padding-top-20 padding-bottom-60">
+            <img src="/Content/images/smiling-face.png" style="width:50px" />
+        </div>*@
+            <div style="height: 10vh;"></div>
 
-
-        <p> Wellcome to Pet Grooming Team. An account was created for you on </p>
-        <p>        <a href="#">https:\\petgrooming.com</a>. </p>
-        <p>   Please log into your account with theese credentials, and change your password.</p>
-        
-        <dl class="dl-horizontal">
-            <dt>
-                User:
-            </dt>
-            <dd>
-                @ViewBag.Email
-            </dd>
-            <dt>
-                Pass:
-            </dt>
-            <dd>
-                @ViewBag.Pass
-            </dd>
-        </dl>
+            <a href="/Groomer/Index" class="btn btn-default text-uppercase">
+                <i class="glyphicon glyphicon-menu-left"></i>
+                Back to Groomer List
+            </a>
+        </div>
     </div>
+</div>
+
 <div class="spacer"></div>
-
-<p>
-    @Html.ActionLink("Back to Groomers List", "Index")
-</p>
-
-<style>
-    .email-content {
-        font-family: courier;
-        border: 1px dashed grey;
-        text-align:justify;
-        width: 50rem;
-        padding: 10px;
-    }
-    .spacer {
-        height: 30px;
-    }
-</style>

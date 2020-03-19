@@ -4,24 +4,22 @@
 }
 
 
-<div class="form-group">
+<div class="row padding-5">
     @Html.LabelFor(model => model.ServiceID, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
+    <div class="col-md-5">
         @Html.DropDownListFor(model => model.ServiceID, ViewData["services"] as IEnumerable<SelectListItem>
     , "Please select a service", (isDisabled ? (object)new { @class = "form-control", @disabled = "disabled" } : new { @class = "form-control" }))
         @Html.ValidationMessageFor(model => model.ServiceID, "", new { @class = "text-danger" })
-        <div id="divServiceDetails">
-            @Html.Partial("GetServiceDetailsPartial")
-        </div>
     </div>
+    <div id="divServiceDetails" class="text-primary col-md-5 control-label">
+        @Html.Partial("GetServiceDetailsPartial")
+    </div>
+
 </div>
 
-
-
-
-<div class="form-group">
+<div class="row padding-5">
     @Html.LabelFor(model => model.GroomerID, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
+    <div class="col-md-5">
         @Html.DropDownListFor(model => model.GroomerID, ViewData["groomers"] as IEnumerable<SelectListItem>,
        "Please select a groomer", (isDisabled ? (object)new { @class = "form-control", disabled = "disabled" } : new { @class = "form-control" }))
         @Html.ValidationMessageFor(model => model.GroomerID, "", new { @class = "text-danger" })

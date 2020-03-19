@@ -6,6 +6,8 @@ using PetGroomingApplication.Repository;
 using PetGroomingApplication.Services;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -48,8 +50,8 @@ namespace PetGroomingApplication.Controllers
             string userId = User.Identity.GetUserId();
             Groomer groomer =  repository.GetByUserId(userId);
             List<Appointment> appointments = appointmentRepository.GetAppointmentsByGroomerByDate(groomer.GroomerID, date);
-            TimeSpan startTime = groomer.StartWorkTime.TimeOfDay;
-            TimeSpan endTime = groomer.EndWorkTime.TimeOfDay;
+            TimeSpan startTime = groomer.StartWorkingTime.TimeOfDay;
+            TimeSpan endTime = groomer.EndWorkingTime.TimeOfDay;
 
             List<GroomerCalendarViewModel> calendar = CalendarService.GroomerAppointmentsCalendar(
                 appointments, startTime, endTime
@@ -78,10 +80,11 @@ namespace PetGroomingApplication.Controllers
         [Authorize(Roles = "admin")]
         public ActionResult Register()
         {
-            return View("Register");
+            GroomerRegisterViewModel groomer = new  GroomerRegisterViewModel();
+            return View("Register", groomer);
         }
 
-        // POST: Owner/Create with user
+        // POST: Groomer/Register with user
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin")]
@@ -92,7 +95,7 @@ namespace PetGroomingApplication.Controllers
             {
                 var user = new ApplicationUser
                 {
-                    UserName = model.Email,
+                    UserName = model.Name,
                     Email = model.Email
                 };
                 model.Password = RandomPasswordService.GenerateRandomPassword(); // random password
@@ -109,7 +112,32 @@ namespace PetGroomingApplication.Controllers
                     groomer.UserId = user.Id;
                     repository.Insert(groomer);
                     repository.Save();
-                    return RedirectToAction("SuccessRegister", new {email = model.Email, pass= model.Password });
+
+                    // send email to groomer with user & password
+                     
+                    string subject = "Pet Spa credentials";
+                    ViewBag.UserName = model.Name;
+                    ViewBag.Password = model.Password;
+                    string message = RenderRazorViewToString("RegisterEmail", null);
+                    string emailResult;
+                    try
+                    {
+                        PetGroomingApplication.Services.Email.sendEmail(model.Email, subject, message);
+                        emailResult = "The message was sent sussessfully";
+                    }
+                    catch (Exception ex)
+                    {
+                        emailResult = ex.Message;
+                        // write on disk
+                        string fileName = Path.GetFullPath(Server.MapPath(@"~/Data/Sent_credentials.txt"));
+
+                        using (StreamWriter file = new StreamWriter(fileName, true))
+                        {
+                            file.WriteLine($"{DateTime.Now}\nUser name: {model.Name} \nPassword: {model.Password}\n-------------------");
+                        }
+                    }
+                    ViewBag.EmailResult = emailResult;
+                    return RedirectToAction("SuccessRegister");
                 }
                 AddErrors(result);
             }
@@ -122,13 +150,7 @@ namespace PetGroomingApplication.Controllers
         public ActionResult SuccessRegister(string email, string pass)
         {
             
-            // send email to groomer with user & password
-            // ...........................           
-           
-            // show authenticate data, only for demo
-            ViewBag.Email = email;
-            ViewBag.Pass = pass;
-            return View("SuccessRegister");
+               return View("SuccessRegister");
         }
 
 
@@ -170,16 +192,51 @@ namespace PetGroomingApplication.Controllers
          // POST: Groomer/Delete/5
         [HttpPost]
         [Authorize(Roles ="admin")]
-        public ActionResult Delete(Guid id, FormCollection collection)
+        public async Task<ActionResult> Delete(Guid id, FormCollection collection)
         {
+            Groomer groomer = repository.GetById(id);
             try
             {
+                string userId = repository.GetById(id).UserId;
                 repository.Delete(id);
                 repository.Save();
+
+                 ApplicationUser user = await UserManager.FindByIdAsync(userId);
+                if(user != null)
+                {
+                    var result = await UserManager.DeleteAsync(user);
+                    if (!result.Succeeded)
+                    {
+                        ModelState.AddModelError("", "Cannot delete user!");
+                        AddErrors(result);
+                        return View("Delete");
+                    }
+                }
                 return RedirectToAction("Index");
             }
-            catch
+            catch (Exception e)
             {
+
+                if (e.GetBaseException().GetType() == typeof(SqlException))
+                {
+                    Int32 ErrorCode = ((SqlException)e.GetBaseException()).Number;
+                    switch (ErrorCode)
+                    {
+                        case 2627:  // Unique constraint error
+                            break;
+                        case 547:   // Constraint check violation
+                            ModelState.AddModelError("", "There are appointments linked to this groomer!");
+                            break;
+                        case 2601:  // Duplicated key row error
+                            break;
+                        default:
+                            ModelState.AddModelError("", e.Message);
+                            break;
+                    }
+                }
+               
+                ModelState.AddModelError("", "The groomer cannot be deleted!");
+
                 return View("Delete");
             }
         }
@@ -188,6 +245,22 @@ namespace PetGroomingApplication.Controllers
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError("", error);
+            }
+        }
+
+
+        private string RenderRazorViewToString(string viewName, object model)
+        {
+            ViewData.Model = model;
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext,
+                                                                         viewName);
+                var viewContext = new ViewContext(ControllerContext, viewResult.View,
+                                             ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+                viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
+                return sw.GetStringBuilder().ToString();
             }
         }
 

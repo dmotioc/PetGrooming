@@ -1,0 +1,1 @@
+﻿update Groomers set StartWorkingTime = StartWorkTime, EndWorkingTime = EndWorkTime

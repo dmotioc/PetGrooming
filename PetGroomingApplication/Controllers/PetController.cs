@@ -82,6 +82,9 @@ namespace PetGroomingApplication.Controllers
             try
             {
                 UpdateModel(pet);
+                string userId = User.Identity.GetUserId();
+                ownerID = ownerRepository.GetIdByUserId(userId);
+                pet.OwnerID = ownerID;
                 repository.Update(pet);
                 repository.Save();
                 return RedirectToAction("Index");

@@ -2,15 +2,29 @@
 
 @{
     ViewBag.Title = "Delete";
+    ViewBag.targetMenu = "groomers";
 }
 
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete this position?</h3>
 <div>
-    <h4>Groomer</h4>
-    <hr />
-    <dl class="dl-horizontal">
+    <i class="glyphicon glyphicon-menu-left"></i>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+<div class="padding-10"></div>
+<h4>Erase Groomer account</h4>
+<hr />
+
+<div class="col-md-6">
+    @if (ViewData.ModelState.IsValid)
+    {
+        <div class="bg-warning padding-10">Are you sure you want to delete this position?</div>
+    }
+    else { 
+        <div class="panel panel-danger">
+            <div class="panel-heading">An error occur</div>
+            @Html.ValidationSummary(true, "", new { @class = "panel-body" })
+        </div>
+    }
+    <dl class="dl-horizontal padding-10">
         <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -20,19 +34,19 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.StartWorkTime)
+            @Html.DisplayNameFor(model => model.StartWorkingTime)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.StartWorkTime)
+            @Html.DisplayFor(model => model.StartWorkingTime)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.EndWorkTime)
+            @Html.DisplayNameFor(model => model.EndWorkingTime)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.EndWorkTime)
+            @Html.DisplayFor(model => model.EndWorkingTime)
         </dd>
 
         <dt>
@@ -45,12 +59,12 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Delete" class="btn btn-primary text-uppercase" />
         </div>
     }
 </div>

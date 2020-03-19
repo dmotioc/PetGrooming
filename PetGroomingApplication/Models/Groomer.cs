@@ -21,13 +21,13 @@ namespace PetGroomingApplication.Models
         [DataType(DataType.Time)]
         [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true)]
         [Display(Name = "Start Working Time")]
-        public DateTime StartWorkTime { get; set; }
+        public DateTime StartWorkingTime { get; set; }
         
         [Required]
         [DataType(DataType.Time)]
         [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true)]
         [Display(Name = "End Working Time")] 
-        public DateTime EndWorkTime { get; set; }
+        public DateTime EndWorkingTime { get; set; }
         
         [Required]
         [Display(Name = "Specializing (Species)")]

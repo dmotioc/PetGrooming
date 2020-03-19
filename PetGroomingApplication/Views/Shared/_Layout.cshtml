@@ -3,103 +3,96 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title -Pet Grooming Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
-    @*@Scripts.Render("~/bundles/jqueryval")*@
-    @Scripts.Render("~/bundles/bootstrap")
+    <script>
+         $(function () {
+             $(document).ready(function() {
+                 $("#@ViewBag.targetMenu").addClass("selected");
+             });
+        })
+    </script>
     @RenderSection("scripts", required: false)
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-        }
-
-        footer {
-            height: 50px;
-            background: PapayaWhip;
-        }
-
-        body {
-            display: table;
-            width: 100%;
-        }
-
-        footer {
-            display: table-row;
-        }
-    </style>
-
 
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Pet Grooming Salon", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+<body data-spy="scroll" data-target=".navbar-collapse">
+    <div class='preloader'><div class='loaded'>&nbsp;</div></div>
+    <div class="culmn">
+        <header id="main_menu" class="menu-scroll">
+            <div class="main_menu_bg">
+                <div class="container">
+                    <div class="row">
+                        <div class="nave_menu">
+                            <nav class="navbar navbar-default" style="width:100%">
+                                <div class="container-fluid">
+                                    @Html.Partial("_LoginPartial")
+
+                                    <div class="navbar-header">
+                                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                        </button>
+                                        <a href="/Home">
+                                            <img style="width:90px" src="~/Content/images/logo4.png" />
+                                        </a>
+                                        &emsp;
+                                    </div>
+                                    <div class="navbar-collapse collapse">
+                                        <ul class="nav navbar-nav">
+                                            @if (User.IsInRole("user"))
+                                            {
+                                                <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                                                <li>@Html.ActionLink("Book Appointment", "CreateAppointment", "Owner", null, new { @id = "create-appointment" })</li>
+                                                <li>@Html.ActionLink("My Appointments", "Index", "Owner", null, new { @id = "appointments" })</li>
+                                                <li>@Html.ActionLink("My pets", "Index", "Pet", null, new { @id = "pets" })</li>
+                                                <li>@Html.ActionLink("My profile", "Edit", "Owner", null, new { @id = "my-profile" })</li>
+                                            }
+                                            else if (User.IsInRole("admin"))
+                                            {
+                                                <li>@Html.ActionLink("Groomers", "Index", "Groomer", null, new { @id = "groomers" })</li>
+                                                <li>@Html.ActionLink("Services", "Index", "Service", null, new { @id = "services" })</li>
+                                            }
+                                            else if (User.IsInRole("staff"))
+                                            {
+                                                string calendarDate = DateTime.Today.ToString("yyyy-MM-dd");
+                                                <li>
+                                                    @Html.ActionLink(
+                                                        linkText: "Appointments",
+                                                        actionName: "Calendar",
+                                                        controllerName: "Groomer",
+                                                        routeValues: new { date = calendarDate },
+                                                        htmlAttributes: new { @id = "appointments" }
+                                                    )
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </nav>
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
+        </header> <!--End of header -->
 
-                    @{
-                        if (User.IsInRole("admin"))
-                        {
-                            <li>@Html.ActionLink("Groomers", "Index", "Groomer")</li>
-                            <li>@Html.ActionLink("Services", "Index", "Service")</li>
-                         }
-                    }
+        <div class="container body-content" style="margin-top:100px;">
+            @RenderBody()
 
-                    @{
-                        if (User.IsInRole("staff"))
-                        {
-                            string calendarDate = DateTime.Today.ToString("yyyy-MM-dd");
-                            <li>
-                                @Html.ActionLink(
-                                    linkText: "Appointments",
-                                    actionName: "Calendar",
-                                    controllerName: "Groomer",
-                                    routeValues: new { date = calendarDate },
-                                    htmlAttributes: null
-                                )
-                            </li>
-                        }
-                    }
-
-
-                    @{
-                        if (User.IsInRole("user"))
-                        {
-                            <li>@Html.ActionLink("Appointment", "CreateAppointment", "Owner")</li>
-                            <li>@Html.ActionLink("My pets", "Index", "Pet")</li>
-                            <li>@Html.ActionLink("Edit owner profile", "Edit", "Owner")</li>
-
-                        }
-                    }
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
         </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
+        @*       <footer>
+                <p>&copy; @DateTime.Now.Year -Pet Grooming Application</p>
+            </footer>
+        *@
 
     </div>
-    <footer>
-        <p>&copy; @DateTime.Now.Year -Pet Grooming Application</p>
-    </footer>
-
-    @*@Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)*@
+
 </body>
 </html>

@@ -72,6 +72,8 @@ namespace PetGroomingApplication.Controllers
             Service service = new Service(); 
             try
             {
+                string rate = collection["Rate"];
+                //collection["Rate"] = decimal.Parse(rate, System.Globalization.NumberStyles.Currency);
                 UpdateModel(service);
                 repository.Update(service);
                 repository.Save();

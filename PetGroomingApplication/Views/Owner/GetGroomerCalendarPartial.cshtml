@@ -2,9 +2,8 @@
     @{
         if (ViewBag.calendar != null)
         {
-        <p> &emsp;&emsp; &emsp;&emsp;Click below to choose appointment time</p>
-
-            <div class="lead"></div>
+            <div class="margin-top-20"></div>
+            
             <table class="calendar">
                 @{
                     bool displayHeader = true;
@@ -15,7 +14,7 @@
                         if (displayHeader)
                         {
                             <tr>
-                                <th>Date</th>
+                                <th></th>
                                 @foreach (var item in calendarPerDay)
                                 {
                                     <th>
