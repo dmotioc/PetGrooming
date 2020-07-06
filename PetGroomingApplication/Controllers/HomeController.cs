@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using System.Configuration;
+using System.Threading.Tasks;
 using PetGroomingApplication.Models;
+using PetGroomingApplication.GenericRepository;
+using PetGroomingApplication.Repository;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,17 +28,41 @@ namespace PetGroomingApplication.Controllers
             {
                 string calendarDate = DateTime.Today.ToString("yyyy-MM-dd"); 
                 return RedirectToAction("Calendar", "Groomer", new { date = calendarDate } );
-            }            
-            else if (User.IsInRole("staff"))
-            {
-                return RedirectToAction("Admin");
             }
 
-            else if (User.IsInRole("user"))
-            {
-                return RedirectToAction("CreateAppointment", "Owner");
-            }
+            //else if (User.IsInRole("user"))
+            //{
+            //    return RedirectToAction("CreateAppointment", "Owner");
+            //}
 
+             Dictionary<string, string> dogServices = new Dictionary<string, string>
+             {
+                 { "Full Grooming Service", "A bath with towel and hair drying, teeth brushing, nail trimming, eye and ear cleaning, a brush out, and a haircut based upon your dog’s breed standard or your individual style choice."},
+                 { "Bath Grooming", "A bath, trimmed nails, and cleaned ears."},
+                 { "De-matting", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ip sum has been the industry's standard dummy text ever."}
+             };
+             ViewBag.dogServices = dogServices;
+
+             ViewBag.catServices = new Dictionary<string, string>
+             {
+                 { "Full Grooming Service" , "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ip sum has been the industry's standard dummy text ever."},
+                 { "Bath Grooming", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ip sum has been the industry's standard dummy text ever."},
+                 { "De-matting", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ip sum has been the industry's standard dummy text ever." }
+             };
+
+            GroomerRepository groomerRepo = new GroomerRepository();
+            IEnumerable<Groomer> groomers = groomerRepo.GetAll();
+            var groomerList = new List<Dictionary<string,  string>>();
+            string groomerPath = "/Content/images/groomers";
+            foreach (Groomer groomer in groomers)
+            {
+                groomerList.Add(new Dictionary<string, string> {
+                    {"name", groomer.Name },
+                    {"specializing", groomer.Specializing.ToString()},
+                    {"file" , groomerPath + "/" + groomer.Name + ".jpg" }
+                });
+            }
+            ViewBag.groomers = groomerList;
 
             string galleryPath = "~/Content/images/gallery";
             Dictionary<string, IEnumerable<string>> galleryFiles = new Dictionary<string, IEnumerable<string>>();
@@ -49,8 +77,11 @@ namespace PetGroomingApplication.Controllers
                 }
                 catch
                 { }
-             }
+            }
             ViewBag.gallery = galleryFiles;
+
+            ViewBag.mapKey = ConfigurationManager.AppSettings["GoogleMapKey"];
+
 
 
             return View();
@@ -65,19 +96,19 @@ namespace PetGroomingApplication.Controllers
 
         // POST: /Home/Contact
         [HttpPost]
-        public JsonResult Contact(ContactViewModel contact)
+        public ActionResult Contact(ContactViewModel contact)
         {
-            string ourEmail = "dana.motioc@gmail.com";
+            string ourEmail = System.Configuration.ConfigurationManager.AppSettings["ContactEmailAddress"];
             //ContactViewModel contact = new ContactViewModel();
             //UpdateModel(contact);
             Dictionary<string, string> result = new Dictionary<string, string>();
             try
             {
-                PetGroomingApplication.Services.Email.sendEmail(
+                PetGroomingApplication.Services.Email.Send(
                 ourEmail,
-                String.Format($"{contact.Subject} - from {contact.Name} ({contact.From})"),
+                String.Format($"Contact subject: {contact.Subject} - from {contact.Name} ({contact.From})"),
                 contact.Message);
-                result["success-message"] = "Your message was sent sussessfully";
+                result["success-message"] = "The message was sent successfully.";
             }
             catch(Exception ex)
             {

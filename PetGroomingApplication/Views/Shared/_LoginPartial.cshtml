@@ -13,7 +13,7 @@
             @Html.ActionLink("Hello " + User.Identity.GetUserName() + " !", "ChangePassword", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
         </li>
         <li>
-            <a href="javascript:document.getElementById('logoutForm').submit()">
+            <a href="javascript:document.getElementById('logoutForm').submit()" title="Log out">
                 <span class="glyphicon glyphicon-log-out"></span>
             </a>
         </li>
@@ -24,12 +24,12 @@ else
 {
     <ul class="nav navbar-nav navbar-right">
         <li>
-            <a href="/Owner/Register/registerLink" class="">
+            <a href="/Owner/Register/registerLink" class="" title="Sign up">
                 <span class="glyphicon glyphicon-user" ></span>
             </a>
          </li>
         <li>
-            <a href="/Account/Login/loginLink">
+            <a href="/Account/Login/loginLink" title="Log in">
                 <span class="glyphicon glyphicon-log-in"></span>
             </a>
         </li>

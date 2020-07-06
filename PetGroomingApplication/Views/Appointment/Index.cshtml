@@ -1,0 +1,83 @@
+﻿@model IEnumerable<PetGroomingApplication.Models.Appointment>
+
+@{
+    ViewBag.Title = "Appointments";
+    ViewBag.targetMenu = "appointments";
+}
+
+<h2>Appointments</h2>
+@{
+    string date = ViewBag.Date;
+}
+<div class="col-md-8 padding-10">
+    Date
+    <input id="date" value="@date" class="date-picker" />
+</div>
+<div class="col-md-8">
+    <table class="table">
+        <tr>
+
+            <th>
+                Groomer
+            </th>
+            <th>
+                Time
+            </th>
+            <th>
+                Service
+            </th>
+            <th>
+                Pet name
+            </th>
+            <th></th>
+        </tr>
+
+        @{
+            foreach (var item in Model)
+            {
+                string time = item.DateTime.ToString("HH:mm");
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Groomer.Name)
+                    </td>
+                    <td class="text-primary">
+                        @time
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Service.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pet.Name)
+                    </td>
+
+                    <td>
+                        <a href="/Appointment/Delete?id=@item.AppointmentID" class="btn-row delete">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            <span>Delete</span>
+                        </a>
+
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+@*<script src="~/Scripts/jquery-3.4.1.min.js"></script>*@
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<script>
+    $(function () {
+    $('.date-picker').datepicker({ dateFormat: 'dd.mm.yy' });
+
+        $('.date-picker').change(function () {
+            const date = formatDate($(this).val());
+            const thisUrl = '@Url.Action(null)';
+            window.location.href = thisUrl + '?date=' + date;
+        });
+    })
+
+    function formatDate(dateDMY) {
+            var d = dateDMY.split('.');
+            return [d[2], d[1], d[0]].join('.');
+    }
+</script>

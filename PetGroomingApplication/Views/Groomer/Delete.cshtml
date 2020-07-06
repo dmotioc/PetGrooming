@@ -5,10 +5,7 @@
     ViewBag.targetMenu = "groomers";
 }
 
-<div>
-    <i class="glyphicon glyphicon-menu-left"></i>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
 <div class="padding-10"></div>
 <h4>Erase Groomer account</h4>
 <hr />
@@ -18,7 +15,8 @@
     {
         <div class="bg-warning padding-10">Are you sure you want to delete this position?</div>
     }
-    else { 
+    else
+    {
         <div class="panel panel-danger">
             <div class="panel-heading">An error occur</div>
             @Html.ValidationSummary(true, "", new { @class = "panel-body" })
@@ -57,14 +55,23 @@
             @Html.DisplayFor(model => model.Specializing)
         </dd>
 
+
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <dd class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-primary text-uppercase" />
+            </dd>
+        }
     </dl>
+    
+        @*<a href="/Pet/Index">
+            <i class="glyphicon glyphicon-menu-left"></i>
+            Back to list
+        </a>*@
+        <i class="glyphicon glyphicon-menu-left"></i>
+        @Html.ActionLink("Back to List", "Index")
+    
 
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-primary text-uppercase" />
-        </div>
-    }
 </div>

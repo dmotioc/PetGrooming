@@ -60,38 +60,38 @@
                                                 {
                                                     <li>@Html.ActionLink("Groomers", "Index", "Groomer")</li>
                                                     <li>@Html.ActionLink("Services", "Index", "Service")</li>
+                                                    <li>@Html.ActionLink("Appointments", "Index", "Appointments")</li>
                                                 }
-                                            }
 
-                                            @{
-                                                if (User.IsInRole("staff"))
-                                                {
-                                                    string calendarDate = DateTime.Today.ToString("yyyy-MM-dd");
-                                                    <li>
-                                                        @Html.ActionLink(
-                                                            linkText: "Appointments",
-                                                            actionName: "Calendar",
-                                                            controllerName: "Groomer",
-                                                            routeValues: new { date = calendarDate },
-                                                            htmlAttributes: null
-                                                        )
-                                                    </li>
+                                                @{
+                                                    if (User.IsInRole("staff"))
+                                                    {
+                                                        string calendarDate = DateTime.Today.ToString("yyyy-MM-dd");
+                                                        <li>
+                                                            @Html.ActionLink(
+                                                                linkText: "Appointments",
+                                                                actionName: "Calendar",
+                                                                controllerName: "Groomer",
+                                                                routeValues: new { date = calendarDate },
+                                                                htmlAttributes: null
+                                                            )
+                                                        </li>
+                                                    }
                                                 }
-                                            }
 
 
-                                            @{
-                                                if (User.IsInRole("user"))
-                                                {
-                                                    <li>@Html.ActionLink("Appointment", "CreateAppointment", "Owner")</li>
-                                                    <li>@Html.ActionLink("My pets", "Index", "Pet")</li>
-                                                    <li>@Html.ActionLink("Edit owner profile", "Edit", "Owner")</li>
+                                                @{
+                                                    if (User.IsInRole("user"))
+                                                    {
+                                                        <li>@Html.ActionLink("Appointment", "CreateAppointment", "Owner")</li>
+                                                        <li>@Html.ActionLink("My pets", "Index", "Pet")</li>
+                                                        <li>@Html.ActionLink("Edit owner profile", "Edit", "Owner")</li>
 
+                                                    }
                                                 }
-                                            }
-                                            <li>@Html.ActionLink("About", "About", "Home")</li>
-                                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                                        </ul>
+                                                <li>@Html.ActionLink("About", "About", "Home")</li>
+                                                <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                                            </ul>
                                     </div>
                                 </div>
                             </nav>

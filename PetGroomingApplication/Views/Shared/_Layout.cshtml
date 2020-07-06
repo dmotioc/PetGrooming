@@ -50,11 +50,24 @@
                                                 <li>@Html.ActionLink("My pets", "Index", "Pet", null, new { @id = "pets" })</li>
                                                 <li>@Html.ActionLink("My profile", "Edit", "Owner", null, new { @id = "my-profile" })</li>
                                             }
+
                                             else if (User.IsInRole("admin"))
                                             {
+                                                string date = DateTime.Today.ToString("yyyy-MM-dd");
                                                 <li>@Html.ActionLink("Groomers", "Index", "Groomer", null, new { @id = "groomers" })</li>
                                                 <li>@Html.ActionLink("Services", "Index", "Service", null, new { @id = "services" })</li>
+                                                
+                                                <li>
+                                                    @Html.ActionLink(
+                                                        linkText: "Appointments",
+                                                        actionName: "Index",
+                                                        controllerName: "Appointment",
+                                                        routeValues: new { date = date },
+                                                        htmlAttributes: new { @id = "appointments" }
+                                                    )
+                                                </li>
                                             }
+
                                             else if (User.IsInRole("staff"))
                                             {
                                                 string calendarDate = DateTime.Today.ToString("yyyy-MM-dd");
@@ -66,6 +79,9 @@
                                                         routeValues: new { date = calendarDate },
                                                         htmlAttributes: new { @id = "appointments" }
                                                     )
+                                                </li>
+                                                <li>
+                                                    @Html.ActionLink("Statistics", "Statistics", "Groomer", null, new { @id = "groomers" })
                                                 </li>
                                             }
                                         </ul>

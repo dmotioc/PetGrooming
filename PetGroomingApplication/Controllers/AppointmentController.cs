@@ -30,9 +30,11 @@ namespace PetGroomingApplication.Controllers
 
         // GET: Appointment
         [Authorize(Roles = "admin, staff")]
-        public ActionResult Index()
+        public ActionResult Index(DateTime date)
         {
-            return View();
+            List<Appointment> appointments= appointmentRepository.GetAppointmentsByDate(date);
+            ViewBag.Date = date.ToString("dd.MM.yyyy");
+            return View(appointments);
         }
 
         // GET: Appointment/Details/5
@@ -40,72 +42,35 @@ namespace PetGroomingApplication.Controllers
         public ActionResult Details(Guid id)
         {
             Appointment appointment = appointmentRepository.GetById(id);
-             return View("Details", appointment);
-        }
-        
-         // GET: Appointment/Create
-        public ActionResult Create()
-        {
-            return View();
+            return View("Details", appointment);
         }
 
-        // POST: Appointment/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Appointment/Edit/5
-        public ActionResult Edit(Guid id)
-        {
-            return View();
-        }
-
-        // POST: Appointment/Edit/5
-        [HttpPost]
-        public ActionResult Edit(Guid id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
         // GET: Appointment/Delete/5
+        [Authorize(Roles = "admin, staff")]
         public ActionResult Delete(Guid id)
         {
-            return View();
+            Appointment appointment = appointmentRepository.GetById(id); 
+            return View("Delete", appointment);
         }
 
         // POST: Appointment/Delete/5
         [HttpPost]
+        [Authorize(Roles = "admin, staff")]
         public ActionResult Delete(Guid id, FormCollection collection)
         {
+            Appointment appointment = appointmentRepository.GetById(id);
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                DateTime date = appointment.DateTime;
+                appointmentRepository.Delete(id);
+                appointmentRepository.Save();
+                return RedirectToAction("Index", new { date = date.ToString("yyyy-MM-dd") });
             }
-            catch
+            catch (Exception e)
             {
-                return View();
+                ModelState.AddModelError("", "Error at delete appointment: " + e.Message);
+                return View("Delete", appointment);
             }
         }
     }

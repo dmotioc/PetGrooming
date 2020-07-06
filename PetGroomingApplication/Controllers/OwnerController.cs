@@ -21,6 +21,7 @@ namespace PetGroomingApplication.Controllers
         private ServiceRepository serviceRepository = null;
         private PetRepository petRepository = null;
         private AppointmentRepository appointmentRepository = null;
+        private const int CALENDAR_SIZE_IN_DAYS = 7;
 
         private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
@@ -101,7 +102,7 @@ namespace PetGroomingApplication.Controllers
                     owner.UserId = user.Id;
                     ownerRepository.Insert(owner);
                     ownerRepository.Save();
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("CreateAppointment", "Owner");
                 }
                 AddErrors(result);
             }
@@ -195,9 +196,9 @@ namespace PetGroomingApplication.Controllers
                 ViewBag.groomerName = groomer.Name;
                 Appointment appointment = Session["Appointment"] as Appointment ?? new Appointment();
                 appointment.GroomerID = groomerID;
-                appointment.Groomer = groomerRepository.GetById(groomerID);
+                appointment.Groomer = groomer;
                 Session["Appointment"] = appointment;
-                ViewBag.calendar = GetGroomerCalendarForDateRange(groomer);
+                ViewBag.calendar = GetAvailabilityCalendarView(groomer);
                 return PartialView("GetGroomerCalendarPartial");
             }
             return default;
@@ -208,7 +209,16 @@ namespace PetGroomingApplication.Controllers
         [Authorize(Roles = "user")]
         public ActionResult CheckAvailability(Appointment appointment)
         {
-            bool output = isAppointmentPossible(appointment);
+            if (appointment.Service == null)
+            {
+                appointment.Service = serviceRepository.GetById(appointment.ServiceID);
+                Session["Appointment"] = appointment;
+            }
+            if (appointment.Groomer == null)
+            {
+                appointment.Groomer = groomerRepository.GetById(appointment.GroomerID);
+            }
+            bool output = CreateAppointmentService.IsAppointmentPossible(appointment);
             return Content(output.ToString().ToLower());
         }
 
@@ -219,18 +229,27 @@ namespace PetGroomingApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!isAppointmentPossible(appointment))
+                if (appointment.Service == null)
+                {
+                    appointment.Service = serviceRepository.GetById(appointment.ServiceID);
+                }
+                if (appointment.Groomer == null)
+                {
+                    appointment.Groomer = groomerRepository.GetById(appointment.GroomerID);
+                }
+
+                if (!CreateAppointmentService.IsAppointmentPossible(appointment))
                 {
                        return Content("There is not enough available time for this service at this time!");
                 }
                 //    save appointment 
                 try
                 {
-                    appointmentRepository.Insert(appointment);
-                    appointmentRepository.Save();
+                    appointmentRepository.SaveAppointment(appointment);
                     Session["Appointment"] = null;
                     return Content("OK");
-                }catch(Exception e)
+                }
+                catch(Exception e)
                 {
                     return Content("Save appointment error: " + e.Message + "!");
                 }
@@ -319,7 +338,7 @@ namespace PetGroomingApplication.Controllers
 
             if (appointment.GroomerID != Guid.Empty) { 
                 Groomer groomer = groomerRepository.GetById(appointment.GroomerID);
-                ViewBag.calendar = GetGroomerCalendarForDateRange(groomer);
+                ViewBag.calendar = GetAvailabilityCalendarView(groomer);
             }
 
         }
@@ -343,36 +362,14 @@ namespace PetGroomingApplication.Controllers
             ViewData["groomers"] = lstGroomers;
         }
 
-        private Dictionary<DateTime, List<AvailabilityCalendarViewModel>> GetGroomerCalendarForDateRange(Groomer groomer)
+        private Dictionary<DateTime, List<AvailabilityCalendarViewModel>> GetAvailabilityCalendarView(Groomer groomer)
         {
 
-            // calendar for x days , start from today
-            var calendar = new Dictionary<DateTime, List<AvailabilityCalendarViewModel>>();
-            foreach (DateTime date in CalendarService.DateRange(DateTime.Today.Date, 7))
-            {
-                calendar.Add(date, GetGroomerCalendarByDay(date, groomer));
-            };
-            return calendar;
+            // calendar for CALENDAR_SIZE_IN_DAYS days , start from today
+             return CreateAppointmentService.GetCalendarViewByGroomerByDateInterval(groomer, DateTime.Today.Date, CALENDAR_SIZE_IN_DAYS);
+            
         }
 
-        private List<AvailabilityCalendarViewModel> GetGroomerCalendarByDay(DateTime date, Groomer groomer)
-        {
-            List<Appointment> appointments = appointmentRepository.GetAppointmentsByGroomerByDate(groomer.GroomerID, date);
-            TimeSpan startTime = groomer.StartWorkingTime.TimeOfDay;
-            TimeSpan endTime = groomer.EndWorkingTime.TimeOfDay;
-            List<AvailabilityCalendarViewModel> calendar = CalendarService.AvailabilityCalendar(appointments, startTime, endTime);
-            return calendar;
-        }
-
-        private bool isAppointmentPossible(Appointment appointment)
-        {
-            DateTime dateTime = appointment.DateTime;
-            Groomer groomer = groomerRepository.GetById(appointment.GroomerID);
-            List<AvailabilityCalendarViewModel> calendar = GetGroomerCalendarByDay(dateTime.Date, groomer);
-
-            int serviceLength = serviceRepository.GetServiceLength(appointment.ServiceID);
-            return CalendarService.IsAppointmentPosible(appointment, serviceLength, calendar);
-        }
         #endregion
 
     }

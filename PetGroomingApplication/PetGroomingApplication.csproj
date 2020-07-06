@@ -46,12 +46,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Entity.Design" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -101,9 +105,6 @@
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
@@ -281,8 +282,10 @@
     <Compile Include="Repository\OwnerRepository.cs" />
     <Compile Include="Repository\GroomerRepository.cs" />
     <Compile Include="Repository\AppointmentRepository.cs" />
-    <Compile Include="Services\CalendarService.cs" />
+    <Compile Include="Services\CalendarViewMapperService.cs" />
     <Compile Include="Services\Email.cs" />
+    <Compile Include="Services\GroomerCalendarService.cs" />
+    <Compile Include="Services\CreateAppointmentService.cs" />
     <Compile Include="Services\RandomPasswordService.cs" />
     <Compile Include="Services\Helpers.cs" />
     <Compile Include="Startup.cs" />
@@ -580,6 +583,8 @@
     <Content Include="Content\themes\bino\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Groomer\RegisterEmail.cshtml" />
+    <Content Include="Views\Appointment\Index.cshtml" />
+    <Content Include="Views\Appointment\Delete.cshtml" />
     <None Include="Views\Owner\GetServiceDetailsPartial.cshtml" />
     <Content Include="Views\Shared\_DashboardLayout.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />

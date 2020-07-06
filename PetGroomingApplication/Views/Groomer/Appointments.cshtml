@@ -10,14 +10,14 @@
     @*@Html.ActionLink("Create New", "Create")*@
 </p>
 
-<h3>@ViewBag.groomerName</h3>
-
 @{
     string date = ViewBag.Date;
 }
-Date
-<input id="date" value="@date" class="date-picker" />
-@*Html.TextBox("Date", date, null, new { @class = "date-picker form-control" })*@
+<div class="title padding-10">
+    <h3> @ViewBag.groomerName </h3> &emsp;&emsp;
+    <label for="date"> Date </label>
+    <input id="date" value="@date" class="date-picker" />
+</div>
 
 <div class="lead"></div>
 
@@ -61,8 +61,6 @@ Date
             </tr>
 
         </table>
-        @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
     </div>
 
     <div class="spacer"></div>
@@ -80,7 +78,13 @@ Date
 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
 
 <style>
-
+    h3 {
+        display: inline;
+        margin:0;
+    }
+    .title label {
+        font-size: 16px;
+    }
     table.calendar td {
         width: 48px;
         height: 100px;
@@ -95,8 +99,8 @@ Date
 
     table.calendar td.app-start {
         border-left: 3px solid grey !important;
-    } 
-    
+    }
+
     .Available {
         background: lightgrey;
     }
@@ -104,13 +108,15 @@ Date
     .Booked {
         background: orange;
     }
+
     .pointer {
         cursor: pointer;
     }
 
     .spacer {
-       height: 80px; 
+        height: 80px;
     }
+
     .detail-short {
         padding: 10px;
         text-align: center;
@@ -121,20 +127,20 @@ Date
         position: absolute;
         z-index: 100;
     }
-    
+
     div.legend {
         display: flex;
         margin-top: 20px;
         margin-bottom: 20px;
     }
 
-    div.legend div {
-        border: 1px solid #eee;
-        width: 20px;
-        height: 20px;
-        text-align: center;
-        margin-right: 10px;
-    }
+        div.legend div {
+            border: 1px solid #eee;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            margin-right: 10px;
+        }
 
     input#date {
         width: 90px;

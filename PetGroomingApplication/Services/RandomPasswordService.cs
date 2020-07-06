@@ -27,7 +27,7 @@ namespace PetGroomingApplication.Services
                 "ABCDEFGHJKLMNOPQRSTUVWXYZ",    // uppercase 
                 "abcdefghijkmnopqrstuvwxyz",    // lowercase
                 "0123456789",                   // digits
-                "!@$?_-<>()*%"                        // non-alphanumeric
+                "!@$?_-()*%"                        // non-alphanumeric, without <, >
             };
 
             Random rand = new Random(Environment.TickCount);

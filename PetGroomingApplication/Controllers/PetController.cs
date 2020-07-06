@@ -45,15 +45,15 @@ namespace PetGroomingApplication.Controllers
             return View("Create");
         }
 
-         // POST: Pet/Create
-         [HttpPost]
-         [Authorize(Roles = "user")]
-         public ActionResult Create(Pet pet, string returnUrl)
-         {
+        // POST: Pet/Create
+        [HttpPost]
+        [Authorize(Roles = "user")]
+        public ActionResult Create(Pet pet, string returnUrl)
+        {
             try
             {
                 string userId = User.Identity.GetUserId();
-                ownerID = ownerRepository.GetIdByUserId(userId); 
+                ownerID = ownerRepository.GetIdByUserId(userId);
                 pet.OwnerID = ownerID;
                 repository.Insert(pet);
                 repository.Save();
@@ -73,11 +73,11 @@ namespace PetGroomingApplication.Controllers
             return View("Edit", pet);
         }
 
-         // POST: Pet/Edit/5
-         [HttpPost]
-         [Authorize(Roles = "user")]
-         public ActionResult Edit(Guid id, FormCollection collection)
-         {
+        // POST: Pet/Edit/5
+        [HttpPost]
+        [Authorize(Roles = "user")]
+        public ActionResult Edit(Guid id, FormCollection collection)
+        {
             Pet pet = new Pet();
             try
             {
@@ -114,9 +114,19 @@ namespace PetGroomingApplication.Controllers
                 repository.Save();
                 return RedirectToAction("Index");
             }
-            catch
+            catch (Exception e)
             {
-                return View("Delete");
+                int errorCode;
+                if (int.TryParse(e.Message, out errorCode) && errorCode == (int)DbError.ConstraintCheckViolation)
+                {
+                    ModelState.AddModelError("", "This pet have registered appointments. You have to cancel related appointments in order to delete it!");
+                }
+                else
+                {
+                    ModelState.AddModelError("", e.Message);
+                }
+                Pet pet = repository.GetById(id);
+                return View("Delete", pet);
             }
         }
     }

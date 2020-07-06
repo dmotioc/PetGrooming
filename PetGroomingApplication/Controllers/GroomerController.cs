@@ -6,7 +6,6 @@ using PetGroomingApplication.Repository;
 using PetGroomingApplication.Services;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +17,6 @@ namespace PetGroomingApplication.Controllers
     public class GroomerController : Controller
     {
         private GroomerRepository repository = null;
-        private AppointmentRepository appointmentRepository = null;
         private ApplicationUserManager _userManager;
         public ApplicationUserManager UserManager
         {
@@ -35,7 +33,6 @@ namespace PetGroomingApplication.Controllers
         public GroomerController()
         {
             this.repository = new GroomerRepository();
-            this.appointmentRepository = new AppointmentRepository();
         }
 
         public GroomerController(GroomerRepository repository)
@@ -48,18 +45,17 @@ namespace PetGroomingApplication.Controllers
         public ActionResult Calendar(DateTime date)
         {
             string userId = User.Identity.GetUserId();
-            Groomer groomer =  repository.GetByUserId(userId);
-            List<Appointment> appointments = appointmentRepository.GetAppointmentsByGroomerByDate(groomer.GroomerID, date);
-            TimeSpan startTime = groomer.StartWorkingTime.TimeOfDay;
-            TimeSpan endTime = groomer.EndWorkingTime.TimeOfDay;
-
-            List<GroomerCalendarViewModel> calendar = CalendarService.GroomerAppointmentsCalendar(
-                appointments, startTime, endTime
-            );
-        
+            Groomer groomer = repository.GetByUserId(userId);
+            if (groomer == null)
+            {
+                return Content("Nu a fost gasit contul de stilist pentru userul " + userId.ToString() + "!");
+            }
+            GroomerCalendarService groomerService = new GroomerCalendarService(groomer);
+            List<GroomerCalendarViewModel> calendarView = CalendarViewMapperService.CalendarToGroomerView(groomerService.GetCalendar(date));
+           
             ViewBag.Date = date.ToString("dd.MM.yyyy");
             ViewBag.groomerName = groomer.Name;
-            return View("Appointments", calendar);
+            return View("Appointments", calendarView);
         }
 
         // GET: Groomer
@@ -84,7 +80,7 @@ namespace PetGroomingApplication.Controllers
             return View("Register", groomer);
         }
 
-        // POST: Groomer/Register with user
+        // POST: Groomer/Register - with user
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin")]
@@ -114,28 +110,27 @@ namespace PetGroomingApplication.Controllers
                     repository.Save();
 
                     // send email to groomer with user & password
-                     
-                    string subject = "Pet Spa credentials";
+                    string subject = "Pet Grooming credentials";
                     ViewBag.UserName = model.Name;
                     ViewBag.Password = model.Password;
                     string message = RenderRazorViewToString("RegisterEmail", null);
                     string emailResult;
                     try
                     {
-                        PetGroomingApplication.Services.Email.sendEmail(model.Email, subject, message);
+                        PetGroomingApplication.Services.Email.Send(model.Email, subject, message);
                         emailResult = "The message was sent sussessfully";
                     }
                     catch (Exception ex)
                     {
                         emailResult = ex.Message;
-                        // write on disk
-                        string fileName = Path.GetFullPath(Server.MapPath(@"~/Data/Sent_credentials.txt"));
-
-                        using (StreamWriter file = new StreamWriter(fileName, true))
-                        {
-                            file.WriteLine($"{DateTime.Now}\nUser name: {model.Name} \nPassword: {model.Password}\n-------------------");
-                        }
                     }
+                    //      log on disk
+                    string fileName = Path.GetFullPath(Server.MapPath(@"~/Data/Sent_credentials.txt"));
+                    using (StreamWriter file = new StreamWriter(fileName, true))
+                    {
+                        file.WriteLine($"{DateTime.Now}\nUser name: {model.Name} \nPassword: {model.Password}\n-------------------");
+                    }
+
                     ViewBag.EmailResult = emailResult;
                     return RedirectToAction("SuccessRegister");
                 }
@@ -201,7 +196,7 @@ namespace PetGroomingApplication.Controllers
                 repository.Delete(id);
                 repository.Save();
 
-                 ApplicationUser user = await UserManager.FindByIdAsync(userId);
+                ApplicationUser user = await UserManager.FindByIdAsync(userId);
                 if(user != null)
                 {
                     var result = await UserManager.DeleteAsync(user);
@@ -216,28 +211,16 @@ namespace PetGroomingApplication.Controllers
             }
             catch (Exception e)
             {
-
-                if (e.GetBaseException().GetType() == typeof(SqlException))
+                int errorCode;
+                if (int.TryParse(e.Message, out errorCode) && errorCode == (int)DbError.ConstraintCheckViolation)
                 {
-                    Int32 ErrorCode = ((SqlException)e.GetBaseException()).Number;
-                    switch (ErrorCode)
-                    {
-                        case 2627:  // Unique constraint error
-                            break;
-                        case 547:   // Constraint check violation
-                            ModelState.AddModelError("", "There are appointments linked to this groomer!");
-                            break;
-                        case 2601:  // Duplicated key row error
-                            break;
-                        default:
-                            ModelState.AddModelError("", e.Message);
-                            break;
-                    }
+                    ModelState.AddModelError("", "There are appointments linked to this groomer! You have to cancel related appointments in order to delete this account!");
                 }
-               
-                ModelState.AddModelError("", "The groomer cannot be deleted!");
-
-                return View("Delete");
+                else
+                {
+                    ModelState.AddModelError("", e.Message);
+                }
+                return View("Delete", groomer);
             }
         }
         private void AddErrors(IdentityResult result)
@@ -247,8 +230,6 @@ namespace PetGroomingApplication.Controllers
                 ModelState.AddModelError("", error);
             }
         }
-
-
         private string RenderRazorViewToString(string viewName, object model)
         {
             ViewData.Model = model;

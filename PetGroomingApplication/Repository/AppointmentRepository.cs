@@ -35,11 +35,30 @@ namespace PetGroomingApplication.Repository
             date = date.Date;
             var appointments = groomingContext.Appointments
                         .Where(e => e.GroomerID == groomerID)
-                                //         .Where(e => e.GroomerID == groomerID && Convert.ToDateTime(e.DateTime).Date === date)
-                                .Where(e => System.Data.Entity.DbFunctions.TruncateTime(e.DateTime) == date)
+                        .Where(e => System.Data.Entity.DbFunctions.TruncateTime(e.DateTime) == date)
                         .OrderBy(e => e.DateTime)
                         .ToList();
             return appointments;
+        }
+
+        public List<Appointment> GetAppointmentsByDate(DateTime date)
+        {
+            this.groomingContext.Database.Log += s => Debug.WriteLine(s);
+            date = date.Date;
+            var appointments = groomingContext.Appointments
+                        .Where(e => System.Data.Entity.DbFunctions.TruncateTime(e.DateTime) == date)
+                        .OrderBy(e => e.GroomerID)
+                        .ToList();
+            return appointments;
+        }
+
+        public void SaveAppointment(Appointment appointment)
+        {
+           appointment.Groomer = null;
+           appointment.Service = null;
+           appointment.Pet = null;
+           Insert(appointment); // inherit from GenericRepository
+           Save();
         }
     }
 }

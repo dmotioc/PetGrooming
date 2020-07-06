@@ -147,69 +147,26 @@
                         <div class="head_title">
                             <h2 class="left">DOGS SERVICES</h2>
                         </div>
-
-                        <div class="row left">
-                            <div class="col-md-12 col-sm-10 col-xs-10 margin-bottom-60">
-                                <div class="row">
-
-                                    <div class="col-sm-10 col-sm-offset-1 col-xs-9 col-xs-offset-1">
-                                        <article class="single_service_right_text">
-                                            <h4>Full Grooming Service</h4>
-                                            <p>
-                                                A bath with towel and hair drying, teeth brushing, nail trimming, eye and ear cleaning, a brush out, and a haircut based upon your dog’s breed standard or your individual style choice.
-                                            </p>
-                                        </article>
-                                    </div>
-                                    <div class="col-sm-1 col-xs-1">
-                                        <figure class="single_service_icon">
-                                            <i class="fa fa-heart"></i>
-                                        </figure><!-- End of figure -->
-                                    </div>
+                        @{
+                            foreach (var pair in ViewBag.dogServices)
+                            {
+                                string title = pair.Key;
+                                string desc = pair.Value;
+                                <div>
+                                    <figure class="single_service_icon left">
+                                        <i class="fa fa-heart"></i>
+                                    </figure>
+                                    <article class="single_service_right_text">
+                                        <h4>@title</h4>
+                                        <p>@desc</p>
+                                    </article>
                                 </div>
-                            </div><!-- End of col-sm-12 -->
+                            }
 
-                            <div class="col-md-12 col-sm-10 col-xs-10 margin-bottom-60">
-                                <div class="row">
-
-                                    <div class="col-sm-10 col-sm-offset-1 col-xs-9 col-xs-offset-1">
-                                        <article class="single_service_right_text">
-                                            <h4>Bath Grooming</h4>
-                                            <p>
-                                                A bath, trimmed nails, and cleaned ears.
-                                            </p>
-                                        </article>
-                                    </div>
-                                    <div class="col-sm-1 col-xs-1">
-                                        <figure class="single_service_icon">
-                                            <i class="fa fa-heart"></i>
-                                        </figure><!-- End of figure -->
-                                    </div>
-                                </div>
-                            </div><!-- End of col-sm-12 -->
-
-                            <div class="col-md-12 col-sm-10 col-xs-10 margin-bottom-60">
-                                <div class="row">
-
-                                    <div class="col-sm-10 col-sm-offset-1 col-xs-9 col-xs-offset-1 margin-bottom-20">
-                                        <article class="single_service_right_text">
-                                            <h4>De-matting</h4>
-                                            <p>
-                                                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                                                Lorem Ip sum has been the industry's standard dummy text ever.
-                                            </p>
-                                        </article>
-                                    </div>
-                                    <div class="col-sm-1 col-xs-1">
-                                        <figure class="single_service_icon">
-                                            <i class="fa fa-heart"></i>
-                                        </figure><!-- End of figure -->
-                                    </div>
-                                </div>
-                            </div><!-- End of col-sm-12 -->
-
-                        </div>
+                        }
                     </div>
-                </div><!-- End of col-sm-6 -->
+                </div>
+
 
                 <div class="col-md-6 col-sm-12 no-padding">
                     <div style="display:flex; background-color:lightgrey; justify-content:center; align-items:center;">
@@ -240,75 +197,28 @@
                             <h2 class="right">CAT SERVICES</h2>
                         </div>
 
-                        <div class="row right">
-                            <div class="col-md-12 col-sm-10 col-xs-10 margin-bottom-60">
-                                <div class="row">
-
-                                    <div class="col-sm-1 col-xs-1">
-                                        <figure class="single_service_icon">
-                                            <i class="fa fa-heart"></i>
-                                        </figure><!-- End of figure -->
-                                    </div>
-                                    <div class="col-sm-10 col-sm-offset-1 col-xs-9 col-xs-offset-1">
-                                        <article class="single_service_right_text">
-                                            <h4>Full Grooming Service</h4>
-                                            <p>
-                                                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                                                Lorem Ip sum has been the industry's standard dummy text ever.
-                                            </p>
-                                        </article>
-                                    </div>
+                        @{
+                            foreach (var pair in ViewBag.catServices)
+                            {
+                                string title = pair.Key;
+                                string desc = pair.Value;
+                                <div>
+                                    <figure class="single_service_icon right">
+                                        <i class="fa fa-heart"></i>
+                                    </figure>
+                                    <article class="single_service_right_text">
+                                        <h4>@title</h4>
+                                        <p>@desc</p>
+                                    </article>
                                 </div>
-                            </div><!-- End of col-sm-12 -->
+                            }
 
-                            <div class="col-md-12 col-sm-10 col-xs-10 margin-bottom-60">
-                                <div class="row">
+                        }
 
-                                    <div class="col-sm-1 col-xs-1">
-                                        <figure class="single_service_icon">
-                                            <i class="fa fa-heart"></i>
-                                        </figure><!-- End of figure -->
-                                    </div>
-                                    <div class="col-sm-10 col-sm-offset-1 col-xs-9 col-xs-offset-1">
-                                        <article class="single_service_right_text">
-                                            <h4>Bath Grooming</h4>
-                                            <p>
-                                                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                                                Lorem Ip sum has been the industry's standard dummy text ever.
-                                            </p>
-                                        </article>
-                                    </div>
-                                </div>
-                            </div><!-- End of col-sm-12 -->
-
-                            <div class="col-md-12 col-sm-10 col-xs-10 margin-bottom-60">
-                                <div class="row">
-                                    <div class="col-sm-1 col-xs-1">
-                                        <figure class="single_service_icon">
-                                            <i class="fa fa-heart"></i>
-                                        </figure><!-- End of figure -->
-                                    </div>
-
-                                    <div class="col-sm-10 col-sm-offset-1 col-xs-9 col-xs-offset-1 margin-bottom-20">
-                                        <article class="single_service_right_text">
-                                            <h4>De-matting</h4>
-                                            <p>
-                                                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                                                Lorem Ip sum has been the industry's standard dummy text ever.
-                                            </p>
-                                        </article>
-                                    </div>
-                                </div>
-                            </div><!-- End of col-sm-12 -->
-
-                        </div>
                     </div>
                 </div><!-- End of col-sm-6 -->
-
-
             </div>
-        </div><!-- End of row -->
-
+        </div>
     </div><!-- End of Container-fluid -->
 </section><!-- End of service Section -->
 <!-- Team Section -->
@@ -327,51 +237,23 @@
 
                     <div class="main_team">
                         <ul>
-                            <li>
-                                <div class="single_team_img">
-                                    <img src="/Content/images/groomers/Paul.jpg" alt="" />
-                                </div>
-                                <div class="single_team_text">
-                                    <h4>Paul</h4>
-                                    <p>Dog groomer</p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="single_team_img">
-                                    <img src="/Content/images/groomers/Alina.jpg" alt="" />
-                                </div>
-                                <div class="single_team_text">
-                                    <h4>Alina</h4>
-                                    <p>Dog groomer</p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="single_team_img">
-                                    <img src="/Content/images/groomers/Laura.jpg" alt="" />
-                                </div>
-                                <div class="single_team_text">
-                                    <h4>Laura</h4>
-                                    <p>Cat groomer</p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="single_team_img">
-                                    <img src="/Content/images/groomers/Dana.jpg" alt="" />
-                                </div>
-                                <div class="single_team_text">
-                                    <h4>Dana</h4>
-                                    <p>Dog groomer</p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="single_team_img">
-                                    <img src="/Content/images/groomers/Teo.jpg" alt="" />
-                                </div>
-                                <div class="single_team_text">
-                                    <h4>Teo</h4>
-                                    <p>Cat groomer</p>
-                                </div>
-                            </li>
+                            @{
+                                foreach (var groomer in ViewBag.groomers)
+                                {
+                                    <li>
+                                        <div class="single_team_img">
+                                            <img src="@groomer["file"]" alt="" />
+                                        </div>
+                                        <div class="single_team_text">
+                                            <h4>@groomer["name"]</h4>
+                                            <p>
+                                                @groomer["specializing"]
+                                                groomer
+                                            </p>
+                                        </div>
+                                    </li>
+                                }
+                            }
                         </ul>
                     </div>
 
@@ -426,7 +308,6 @@
                     }
 
                 </div>
-
                 <div style="clear:both;"></div>
             </div>
         </div>
@@ -441,7 +322,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="main_contact_info">
-                                <div class="contact_info_content padding-top-40 p_l_r"  style="min-height: 640px;">
+                                <div class="contact_info_content padding-top-40 p_l_r" style="min-height: 640px;">
                                     <div class="col-sm-12">
                                         <div class="single_contact_info padding-top-20">
                                             <h4>Contact info</h4>
@@ -461,7 +342,7 @@
                                                 <abbr title="Phone"> 0740 xxx xxx</abbr>
                                             </address>
                                         </div>
-                                         <div class="single_contact_info">
+                                        <div class="single_contact_info">
                                             Email:
                                             <div>
                                                 <address>contact@petspa.ro</address>
@@ -506,16 +387,16 @@
                         </div>
 
                         <div class="col-sm-6 col-xs-12">
-                             <div class="flowus">
-                                 <p class=" wow fadeInRight text-right" data-wow-duration="4s" style="color:#fff;font-size:1.5em;">
-                                     Made with 
-                                     <i class="fa fa-heart" style="color:indianred"></i> 
-                                     by Dana Motioc
-                                     <a href="https://github.com/dmotioc/PetGrooming" target="_blank">
-                                         <i class="fa fa-github" style="font-size:2em;"></i>
-                                     </a>
-                                     &emsp;
-                                 </p>
+                            <div class="flowus">
+                                <p class=" wow fadeInRight text-right" data-wow-duration="4s" style="color:#fff;font-size:1.5em;">
+                                    Made with
+                                    <i class="fa fa-heart" style="color:indianred"></i>
+                                    by Dana Motioc
+                                    <a href="https://github.com/dmotioc/PetGrooming" target="_blank">
+                                        <i class="fa fa-github" style="font-size:2em;"></i>
+                                    </a>
+                                    &emsp;
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -527,12 +408,13 @@
 <!-- START SCROLL TO TOP  -->
 
 <div class="scrollup">
-    <a href="#"><i class="fa fa-chevron-up"  style="font-size:2rem;"></i></a>
+    <a href="#"><i class="fa fa-chevron-up" style="font-size:2rem;"></i></a>
 </div>
 
-
+@*AIzaSyA3n9E6fzZ1WdlTvR7-C-1kysUSlMx4WAw*@
 @section Scripts {
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=key"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=              @ViewBag.mapKey"></script>
+
     <script>
         $(function () {
             $(document).on("click", "#submit", function () {
@@ -575,4 +457,4 @@
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
 
-}
+    }

@@ -102,9 +102,19 @@ namespace PetGroomingApplication.Controllers
                 repository.Save();
                 return RedirectToAction("Index");
             }
-            catch
+            catch (Exception e)
             {
-                return View("Delete");
+                int errorCode;
+                if (int.TryParse(e.Message, out errorCode) && errorCode == (int)DbError.ConstraintCheckViolation)
+                {
+                    ModelState.AddModelError("", "This service has registered appointments. You have to cancel related appointments in order to delete it!");
+                }
+                else
+                {
+                    ModelState.AddModelError("", e.Message);
+                }
+                Service service = repository.GetById(id);
+                return View("Delete", service);
             }
         }
     }

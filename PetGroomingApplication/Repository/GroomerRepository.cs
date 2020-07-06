@@ -20,7 +20,7 @@ namespace PetGroomingApplication.Repository
         }
         public Groomer GetByUserId(string userId)
         {
-            this.groomingContext.Database.Log += s => Debug.WriteLine(s);
+            //this.groomingContext.Database.Log += s => Debug.WriteLine(s);
             Groomer groomer = groomingContext.Groomers
                 .Where(g => g.UserId == userId)
                 .FirstOrDefault();
